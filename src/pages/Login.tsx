@@ -1,23 +1,26 @@
 import { Box, Button, FormControl, FormLabel, Input, VStack, useToast } from '@chakra-ui/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { login } from '../api/auth';
+import {useAuth} from "../context/AuthContext.tsx";
 
 const Login = () => {
-	const [userId, setUserId] = useState('');
-	const [password, setPassword] = useState('');
+	const [userId, setUserId] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
 	const toast = useToast();
+	const { login: passLogin } = useAuth();
 	
 	const handleLogin = async (event: React.FormEvent) => {
 		event.preventDefault();
 		try {
-			const response = await login(userId, password);
+			// const response = await login(userId, password);
 			toast({
 				title: "登录成功",
-				description: `您已成功登录，token: ${response.data.token}`,
+				description: `您已成功登录，token:`,
 				status: "success",
 				duration: 9000,
 				isClosable: true,
 			});
+			passLogin();
 			// 进一步处理，如保存token，跳转等
 		} catch (error: any) {
 			toast({
