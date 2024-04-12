@@ -1,13 +1,15 @@
 import { Box, Button, FormControl, FormLabel, Input, VStack, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { login } from '../api/auth';
-import {useAuth} from "../context/AuthContext.tsx";
+// import { login } from '../api/auth';
+import { useAuth } from "../context/AuthContext.tsx";
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 	const [userId, setUserId] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const toast = useToast();
 	const { login: passLogin } = useAuth();
+	const navigate = useNavigate()
 	
 	const handleLogin = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -20,7 +22,9 @@ const Login = () => {
 				duration: 9000,
 				isClosable: true,
 			});
-			passLogin();
+			// TODO 等待token
+			passLogin('test-toekn');
+			navigate('/dashboard')
 			// 进一步处理，如保存token，跳转等
 		} catch (error: any) {
 			toast({
@@ -34,7 +38,7 @@ const Login = () => {
 	};
 	
 	return (
-		<Box minH="100vh" alignItems="center" justifyContent="center">
+		<Box minH="100vh" minW="100vw" display="flex" alignItems="center" justifyContent="center">
 			<Box w="sm" p={8} boxShadow="md">
 				<form onSubmit={handleLogin}>
 					<VStack spacing={4}>
@@ -48,6 +52,11 @@ const Login = () => {
 						</FormControl>
 						<Button colorScheme="blue" w="full" mt={4} type="submit">
 							登录
+						</Button>
+						<Button colorScheme="gray" textColor="black" w="full" mt={4} onClick={() => {
+							navigate('/register')
+						}}>
+							注册
 						</Button>
 					</VStack>
 				</form>

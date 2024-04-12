@@ -12,6 +12,7 @@ import {
 //  Textarea, Image
 import React, { useState } from 'react';
 import AvatarUpload from "../components/AvatarUpload.tsx";
+import {useNavigate} from "react-router-dom";
 
 // 定义 State 类型
 interface UserDetails {
@@ -34,6 +35,7 @@ const Register = () => {
 		avatar: null
 	});
 	const toast = useToast();
+	const navigate = useNavigate()
 	
 	const [error, setError] = useState({ phone: '', password: '' });
 	
@@ -77,8 +79,8 @@ const Register = () => {
 	};
 	
 	return (
-		<Box minH="100vh" alignItems="center" justifyContent="center">
-			<Box w="sm" p={8} boxShadow="md">
+		<Box minH="100vh" minW="100vw" display="flex" alignItems="center" justifyContent="center">
+			<Box width="60%" p={8} boxShadow="md">
 				<Heading as="h2" size="lg" textAlign="center" mb={6}>
 					注册
 				</Heading>
@@ -119,6 +121,11 @@ const Register = () => {
 						</FormControl>
 						<Button colorScheme="blue" w="full" mt={4} type="submit" isDisabled={!!error.phone || !!error.password}>
 							注册
+						</Button>
+						<Button colorScheme="gray" w="full" textColor="black" onClick={() => {
+							navigate('/login')
+						}}>
+							去登录
 						</Button>
 					</VStack>
 				</form>
