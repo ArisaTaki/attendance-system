@@ -7,7 +7,7 @@ import {
 	VStack,
 	useToast,
 	Heading,
-	FormErrorMessage
+	FormErrorMessage, RadioGroup, HStack, Radio
 } from '@chakra-ui/react';
 //  Textarea, Image
 import React, { useState } from 'react';
@@ -23,6 +23,7 @@ interface UserDetails {
 	phone: string;
 	email: string;
 	avatar: File | null;
+	type: string;
 }
 const Register = () => {
 	const [userDetails, setUserDetails] = useState<UserDetails>({
@@ -32,7 +33,8 @@ const Register = () => {
 		department: '',
 		phone: '',
 		email: '',
-		avatar: null
+		avatar: null,
+		type: 'student'
 	});
 	const toast = useToast();
 	const navigate = useNavigate()
@@ -56,13 +58,20 @@ const Register = () => {
 		}
 	};
 	
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setUserDetails(prev => ({
-			...prev,
-			[name]: value
-		}));
-		handleValidation(name, value);
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement> | string) => {
+		if (typeof e === 'string') {
+			setUserDetails(prev => ({
+				...prev,
+				type: e
+			}));
+		} else {
+			const { name, value } = e.target;
+			setUserDetails(prev => ({
+				...prev,
+				[name]: value
+			}));
+			handleValidation(name, value);
+		}
 	};
 	
 	const handleRegister = async (event: React.FormEvent) => {
@@ -76,6 +85,7 @@ const Register = () => {
 			duration: 9000,
 			isClosable: true,
 		});
+		navigate('/login')
 	};
 	
 	return (
@@ -118,6 +128,15 @@ const Register = () => {
 								...prev,
 								avatar: file
 							}))} />
+						</FormControl>
+						<FormControl>
+							<FormLabel>学生还是老师？</FormLabel>
+							<RadioGroup defaultValue="student" name="type" onChange={handleChange}>
+								<HStack spacing={8}>
+									<Radio value="student">学生</Radio>
+									<Radio value="teacher">老师</Radio>
+								</HStack>
+							</RadioGroup>
 						</FormControl>
 						<Button colorScheme="blue" w="full" mt={4} type="submit" isDisabled={!!error.phone || !!error.password}>
 							注册
