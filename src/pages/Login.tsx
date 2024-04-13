@@ -1,8 +1,9 @@
-import { Box, Button, FormControl, FormLabel, Input, VStack, useToast } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import {Box, Button, FormControl, FormLabel, Input, useToast, VStack} from '@chakra-ui/react';
+import React, {useState} from 'react';
 // import { login } from '../api/auth';
 import {useAuth, UserLoginResponse} from "../context/AuthContext.tsx";
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
+import {Role} from "./register.tsx";
 
 const Login = () => {
 	const [userId, setUserId] = useState<string>('');
@@ -19,7 +20,7 @@ const Login = () => {
 				token: 'test-token',
 				userInfo: {
 					account: 'test-account',
-					roles: ['1'],
+					roles: [Role.Admin],
 					nickname: 'test-nickname',
 					majorId: 'test-majorId',
 					colleageId: 'test-colleageId',

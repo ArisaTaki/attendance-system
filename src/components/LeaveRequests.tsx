@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import {Box, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Text, Input, Button} from '@chakra-ui/react';
+import {
+	Box,
+	Table,
+	Thead,
+	Tbody,
+	Tr,
+	Th,
+	Td,
+	TableContainer,
+	Input,
+	Button,
+	VStack,
+	Heading
+} from '@chakra-ui/react';
 
 // 定义请假请求的类型
 interface LeaveRequest {
@@ -33,9 +46,9 @@ const LeaveRequests: React.FC = () => {
 	}, []);
 	
 	return (
-		<Box p={4}>
-			<Text fontSize="xl" mb={4}>我的请假记录</Text>
-			<Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+		<VStack spacing={4} p={5}>
+			<Heading>我的请假记录</Heading>
+			<Box display="flex" width="full" justifyContent="space-between" alignItems="center" mb={4}>
 				<Input
 					placeholder="搜索课程或教师"
 					value={searchTerm}
@@ -43,7 +56,7 @@ const LeaveRequests: React.FC = () => {
 				/>
 				<Button ml={10} colorScheme="blue" onClick={handleSearch}>搜索</Button>
 			</Box>
-			<TableContainer>
+			<TableContainer width="full">
 				<Table variant="simple">
 					<Thead>
 						<Tr>
@@ -67,7 +80,7 @@ const LeaveRequests: React.FC = () => {
 					</Tbody>
 				</Table>
 			</TableContainer>
-		</Box>
+		</VStack>
 	);
 };
 

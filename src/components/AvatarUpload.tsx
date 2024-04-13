@@ -1,9 +1,8 @@
-// src/components/AvatarUpload.tsx
 import { Box, Button, Image, Input } from '@chakra-ui/react';
 import { ChangeEvent, useState, FC } from 'react';
 
 interface AvatarUploadProps {
-	onFileSelected: (file: File) => void; // 为这个函数提供类型定义
+	onFileSelected: (base64: string) => void; // 修改为传递 Base64 字符串
 }
 
 const AvatarUpload: FC<AvatarUploadProps> = ({ onFileSelected }) => {
@@ -12,8 +11,18 @@ const AvatarUpload: FC<AvatarUploadProps> = ({ onFileSelected }) => {
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files ? event.target.files[0] : null;
 		if (file) {
-			setPreview(URL.createObjectURL(file));
-			onFileSelected(file);
+			// Create a file reader
+			const reader = new FileReader();
+			// When the file has been read...
+			reader.onloadend = () => {
+				// Update the preview with the image data
+				const base64String = reader.result as string;
+				setPreview(base64String);
+				// Call onFileSelected with the base64 string
+				onFileSelected(base64String);
+			};
+			// Read the file as a Data URL (Base64)
+			reader.readAsDataURL(file);
 		}
 	};
 	

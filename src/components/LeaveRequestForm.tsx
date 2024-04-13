@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, FormControl, FormLabel, Input, Textarea, useToast, Text } from '@chakra-ui/react';
+import {Box, Button, FormControl, FormLabel, Input, Textarea, useToast, Heading, VStack} from '@chakra-ui/react';
 
 interface FormData {
 	courseName: string;
@@ -32,9 +32,9 @@ const LeaveRequestForm: React.FC = () => {
 	};
 	
 	return (
-		<Box p={4}>
-			<Text fontSize="xl" mb={4}>提交请假记录</Text>
-			<form onSubmit={handleSubmit}>
+		<VStack spacing={4} p={5}>
+			<Heading>提交请假记录</Heading>
+			<form onSubmit={handleSubmit} style={{width: "100%"}}>
 				<FormControl isRequired>
 					<FormLabel>课程名称</FormLabel>
 					<Input name="courseName" value={formData.courseName} onChange={handleChange} />
@@ -55,9 +55,11 @@ const LeaveRequestForm: React.FC = () => {
 					<FormLabel>请假理由</FormLabel>
 					<Textarea name="reason" value={formData.reason} onChange={handleChange} />
 				</FormControl>
-				<Button mt={4} colorScheme="blue" type="submit">Submit</Button>
+				<Box width="full" display="flex" justifyContent="between">
+					<Button mt={4} mx="auto" colorScheme="blue" type="submit">Submit</Button>
+				</Box>
 			</form>
-		</Box>
+		</VStack>
 	);
 };
 
