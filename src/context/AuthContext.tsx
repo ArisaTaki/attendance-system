@@ -1,11 +1,25 @@
 import  { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {Role} from "../pages/register.tsx";
+
+export interface UserLoginResponse {
+	token: string;
+	userInfo: {
+		account: string;
+		nickname: string;
+		roles: Role[];
+		majorId: string;
+		colleageId: string;
+		email: string;
+		phone: string;
+		avatar: string;
+	}
+}
 
 interface AuthContextType {
 	isAuthenticated: boolean;
-	login: (token: string) => void;
+	login: (token: UserLoginResponse) => void;
 	logout: () => void;
 }
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -15,9 +29,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		return !!token;
 	});
 	
-	const login = (token: string) => {
+	const login = (userLoginRes: UserLoginResponse) => {
 		// 假设获取到的 token 是从登录响应中得来的
-		localStorage.setItem('token', token);
+		localStorage.setItem('token', JSON.stringify(userLoginRes));
 		setIsAuthenticated(true);
 	};
 	

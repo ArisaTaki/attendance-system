@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, FormLabel, Input, VStack, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 // import { login } from '../api/auth';
-import { useAuth } from "../context/AuthContext.tsx";
+import {useAuth, UserLoginResponse} from "../context/AuthContext.tsx";
 import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
@@ -15,6 +15,19 @@ const Login = () => {
 		event.preventDefault();
 		try {
 			// const response = await login(userId, password);
+			const mockData: UserLoginResponse = {
+				token: 'test-token',
+				userInfo: {
+					account: 'test-account',
+					roles: ['1'],
+					nickname: 'test-nickname',
+					majorId: 'test-majorId',
+					colleageId: 'test-colleageId',
+					email: 'test-email',
+					phone: 'test-phone',
+					avatar: 'test-avatar'
+				}
+			}
 			toast({
 				title: "登录成功",
 				description: `您已成功登录，token:`,
@@ -23,7 +36,7 @@ const Login = () => {
 				isClosable: true,
 			});
 			// TODO 等待token
-			passLogin('test-toekn');
+			passLogin(mockData);
 			navigate('/dashboard')
 			// 进一步处理，如保存token，跳转等
 		} catch (error: any) {

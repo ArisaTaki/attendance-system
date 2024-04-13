@@ -14,6 +14,11 @@ import React, { useState } from 'react';
 import AvatarUpload from "../components/AvatarUpload.tsx";
 import {useNavigate} from "react-router-dom";
 
+export enum Role {
+	Student = '1',
+	Teacher = '2',
+	Admin = '3'
+}
 // 定义 State 类型
 interface UserDetails {
 	id: string;
@@ -23,7 +28,7 @@ interface UserDetails {
 	phone: string;
 	email: string;
 	avatar: File | null;
-	type: string;
+	type: Role;
 }
 const Register = () => {
 	const [userDetails, setUserDetails] = useState<UserDetails>({
@@ -34,7 +39,7 @@ const Register = () => {
 		phone: '',
 		email: '',
 		avatar: null,
-		type: 'student'
+		type: Role.Student
 	});
 	const toast = useToast();
 	const navigate = useNavigate()
@@ -58,7 +63,7 @@ const Register = () => {
 		}
 	};
 	
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement> | string) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement> | Role) => {
 		if (typeof e === 'string') {
 			setUserDetails(prev => ({
 				...prev,
@@ -131,10 +136,12 @@ const Register = () => {
 						</FormControl>
 						<FormControl>
 							<FormLabel>学生还是老师？</FormLabel>
-							<RadioGroup defaultValue="student" name="type" onChange={handleChange}>
+							<RadioGroup defaultValue="student" name="type" onChange={
+								(value) => handleChange(value as Role)
+							}>
 								<HStack spacing={8}>
-									<Radio value="student">学生</Radio>
-									<Radio value="teacher">老师</Radio>
+									<Radio value={Role.Student}>学生</Radio>
+									<Radio value={Role.Teacher}>老师</Radio>
 								</HStack>
 							</RadioGroup>
 						</FormControl>
