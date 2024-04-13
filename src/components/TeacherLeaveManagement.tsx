@@ -67,39 +67,41 @@ const TeacherLeaveManagement: React.FC = () => {
 				/>
 				<Button onClick={handleSearch} colorScheme="blue">搜索</Button>
 			</FormControl>
-			<Table mt={4}>
-				<Thead>
-					<Tr>
-						<Th>课程名称</Th>
-						<Th>学生姓名</Th>
-						<Th>学生学号</Th>
-						<Th>请假日期</Th>
-						<Th>请假原因</Th>
-						<Th>审批状态</Th>
-						<Th>操作</Th>
-					</Tr>
-				</Thead>
-				<Tbody>
-					{leaveRequests.map((request) => (
-						<Tr key={request.id}>
-							<Td>{request.课程名称}</Td>
-							<Td>{request.学生姓名}</Td>
-							<Td>{request.学生学号}</Td>
-							<Td>{request.请假日期}</Td>
-							<Td>{request.请假原因}</Td>
-							<Td>{request.审批状态}</Td>
-							<Td>
-								{request.审批状态 === '待审批' && (
-									<Select onChange={(e) => updateLeaveRequestStatus(request.id, e.target.value as '已批准' | '已拒绝')}>
-										<option value='已批准'>批准</option>
-										<option value='已拒绝'>拒绝</option>
-									</Select>
-								)}
-							</Td>
+			<Box p={4} overflowX="auto">
+				<Table mt={4} width="100%">
+					<Thead>
+						<Tr>
+							<Th>课程名称</Th>
+							<Th>学生姓名</Th>
+							<Th>学生学号</Th>
+							<Th>请假日期</Th>
+							<Th>请假原因</Th>
+							<Th>审批状态</Th>
+							<Th>操作</Th>
 						</Tr>
-					))}
-				</Tbody>
-			</Table>
+					</Thead>
+					<Tbody>
+						{leaveRequests.map((request) => (
+							<Tr key={request.id}>
+								<Td>{request.课程名称}</Td>
+								<Td>{request.学生姓名}</Td>
+								<Td>{request.学生学号}</Td>
+								<Td>{request.请假日期}</Td>
+								<Td>{request.请假原因}</Td>
+								<Td>{request.审批状态}</Td>
+								<Td>
+									{request.审批状态 === '待审批' && (
+										<Select onChange={(e) => updateLeaveRequestStatus(request.id, e.target.value as '已批准' | '已拒绝')}>
+											<option value='已批准'>批准</option>
+											<option value='已拒绝'>拒绝</option>
+										</Select>
+									)}
+								</Td>
+							</Tr>
+						))}
+					</Tbody>
+				</Table>
+			</Box>
 		</Box>
 	);
 };

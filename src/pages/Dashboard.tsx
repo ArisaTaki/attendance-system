@@ -12,14 +12,17 @@ import SignInCreation from "../components/SignInCreation.tsx";
 import UserInfo from "../components/UserInfo.tsx";
 import TeacherCourseAttendance from "../components/TeacherCourseAttendance.tsx";
 import StudentAttendanceInfo from "../components/StudentAttendanceInfo.tsx";
+import StudentCheckIn from "../components/StudentCheckIn.tsx";
+import EditProfile from "../components/EditProfile.tsx";
 
 const Dashboard = () => {
 	const { logout } = useAuth(); // 从上下文中获取登出函数
 	const [role, setRole] = useState<Role>();
 	const [studentOrTeacherTabIndex, setStudentOrTeacherTabIndex] = useState(0)
 	const [adminTabIndex, setAdminTabIndex] = useState(0)
-	const user = useUser()
+	const { getUserInfo } = useUser()
 	
+	const user = getUserInfo()
 	const handleTabsChange = (index: number) => {
 		if (role === Role.Teacher || role === Role.Student) {
 			setStudentOrTeacherTabIndex(index)
@@ -58,10 +61,10 @@ const Dashboard = () => {
 									<LeaveRequestForm />
 								</TabPanel>
 								<TabPanel>
-									<p>签到</p>
+									<StudentCheckIn />
 								</TabPanel>
 								<TabPanel>
-									<p>个人信息管理</p>
+									<EditProfile />
 								</TabPanel>
 							</TabPanels>
 						</Tabs>
@@ -88,7 +91,7 @@ const Dashboard = () => {
 									<SignInCreation />
 								</TabPanel>
 								<TabPanel>
-									<p>个人信息管理</p>
+									<EditProfile />
 								</TabPanel>
 							</TabPanels>
 						</Tabs>

@@ -22,5 +22,24 @@ export const useUser = () => {
 		}
 	};
 	
-	return getUserInfo();
+	const updateUserInfo = (userInfo: any) => {
+		if (!isAuthenticated) {
+			return;
+		}
+		
+		const tokenString = localStorage.getItem('token');
+		if (!tokenString) {
+			return;
+		}
+		
+		try {
+			const userLoginResponse = JSON.parse(tokenString);
+			userLoginResponse.userInfo = userInfo;
+			localStorage.setItem('token', JSON.stringify(userLoginResponse));
+		} catch (error) {
+			console.error('Failed to parse user data:', error);
+		}
+	}
+	
+	return {getUserInfo, updateUserInfo};
 };

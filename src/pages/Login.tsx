@@ -20,7 +20,7 @@ const Login = () => {
 				token: 'test-token',
 				userInfo: {
 					account: 'test-account',
-					roles: [Role.Admin],
+					roles: [Role.Teacher],
 					nickname: 'test-nickname',
 					majorId: 'test-majorId',
 					colleageId: 'test-colleageId',
