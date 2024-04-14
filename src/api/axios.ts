@@ -8,7 +8,7 @@ export interface AxiosResponse<T = any> {
 }
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:9000",
+  baseURL: "http://localhost:3000/api",
   headers: {
     "Content-Type": "application/json",
   },

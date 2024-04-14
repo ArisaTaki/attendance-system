@@ -45,7 +45,7 @@ const EditProfile: React.FC = () => {
       });
     } catch (error: any) {
       toast({
-        title: "Profile Update Failed",
+        title: "更新失败",
         description: error.message || "Failed to update profile.",
         status: "error",
         duration: 5000,

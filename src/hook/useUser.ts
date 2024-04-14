@@ -34,7 +34,10 @@ export const useUser = () => {
 
     try {
       const userLoginResponse = JSON.parse(tokenString);
-      userLoginResponse.userInfo = userInfo;
+      userLoginResponse.userInfo = {
+        ...userLoginResponse.userInfo,
+        ...userInfo,
+      };
       localStorage.setItem("token", JSON.stringify(userLoginResponse));
     } catch (error) {
       console.error("Failed to parse user data:", error);
