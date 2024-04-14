@@ -1,4 +1,4 @@
-import axiosInstance from "./axios";
+import axiosInstance, { AxiosResponse } from "./axios";
 
 export interface SaveUserProps {
   avatar?: string;
@@ -10,6 +10,26 @@ export interface SaveUserProps {
   password: string;
   phone: string;
   roleId: number;
+}
+
+export interface User {
+  list: {
+    pageNum: null | number;
+    pageSize: null | number;
+    id: number;
+    number: string;
+    name: string;
+    password: string;
+    phone: string | null;
+    email: string | null;
+    age: number | null;
+    avatar: string | null;
+    roleId: number;
+    majorId: number | null;
+    colleageId: number | null;
+    createTime: number;
+  }[];
+  total: number;
 }
 
 export interface UpdateProps {
@@ -32,5 +52,39 @@ export const updateUser = async (user: UpdateProps) => {
     await axiosInstance.post("/user/update", user);
   } catch (error: any) {
     throw new Error(error.message || "更新用户失败");
+  }
+};
+
+export const getStudentList = async (): Promise<User> => {
+  const body = {
+    roleId: 3,
+    pageNum: 1,
+    pageSize: 20,
+  };
+  try {
+    const students: AxiosResponse<User> = await axiosInstance.post(
+      "/user/list",
+      body
+    );
+    return students.data;
+  } catch (error: any) {
+    throw new Error(error.message || "获取学生列表失败");
+  }
+};
+
+export const getTeacherList = async (): Promise<User> => {
+  const body = {
+    roleId: 2,
+    pageNum: 1,
+    pageSize: 20,
+  };
+  try {
+    const teachers: AxiosResponse<User> = await axiosInstance.post(
+      "/user/list",
+      body
+    );
+    return teachers.data;
+  } catch (error: any) {
+    throw new Error(error.message || "获取教师列表失败");
   }
 };

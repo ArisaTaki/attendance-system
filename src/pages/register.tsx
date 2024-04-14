@@ -26,7 +26,7 @@ export enum Role {
   Admin = 1,
 }
 
-interface SelectionProps {
+export interface SelectionProps {
   id: number;
   name: string;
 }
