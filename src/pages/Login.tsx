@@ -6,6 +6,7 @@ import {
   Input,
   useToast,
   VStack,
+  Image,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { login } from "../api/auth";
@@ -50,9 +51,27 @@ const Login = () => {
       minH="100vh"
       minW="100vw"
       display="flex"
+      flexDirection={"column"}
       alignItems="center"
       justifyContent="center"
     >
+      <Box
+        w="sm"
+        mb={4}
+        display="flex"
+        alignItems="center"
+        flexDirection="column"
+      >
+        <Image
+          display={"block"}
+          src="../../public/logo.svg"
+          alt="Random Image"
+          objectFit="cover"
+          width="100%"
+          height="100%"
+        />
+        <h1>考勤考核系统</h1>
+      </Box>
       <Box w="sm" p={8} boxShadow="md">
         <form onSubmit={handleLogin}>
           <VStack spacing={4}>
