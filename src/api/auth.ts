@@ -1,20 +1,15 @@
 // src/api/auth.ts
 import axiosInstance from './axios';
-import {AxiosResponse} from 'axios';
+import { UserLoginResponse } from "../context/AuthContext";
 
-// 返回类型
-interface LoginResponse {
-	token: string;
-	userId: number;
-}
-
-export const login = async (userId: string, password: string): Promise<AxiosResponse<LoginResponse>> => {
+export const login = async (number: string, password: string): Promise<UserLoginResponse> => {
 	try {
-		return await axiosInstance.post<LoginResponse>('/login', {
-			userId,
+		const data: UserLoginResponse = await axiosInstance.post('/login', {
+			number,
 			password
 		});
+		return data;  // 直接返回数据部分
 	} catch (error: any) {
-		throw new Error((error.response && error.response.data && error.response.data.message) || "登录失败");
+		throw new Error(error.message || "登录失败");
 	}
 };
