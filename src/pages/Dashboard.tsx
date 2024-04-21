@@ -1,6 +1,8 @@
 import {
+  Avatar,
   Box,
   Button,
+  Flex,
   Tab,
   TabList,
   TabPanel,
@@ -110,7 +112,12 @@ const Dashboard = () => {
       case Role.Admin:
         return (
           <Box>
-            <Tabs index={adminTabIndex} onChange={handleTabsChange}>
+            <Tabs
+              isLazy
+              lazyBehavior="unmount"
+              index={adminTabIndex}
+              onChange={handleTabsChange}
+            >
               <TabList>
                 <Tab>查看学生/老师信息</Tab>
                 <Tab>查看学生的考勤信息</Tab>
@@ -137,12 +144,28 @@ const Dashboard = () => {
 
   return (
     <Box minW="100vw" minH="100vh" width={0} p={5}>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Flex
+        mb={5}
+        justify="space-between"
+        align="center"
+        p={5}
+        bg="blue.500"
+        color="white"
+      >
+        <Flex align="center">
+          <Avatar
+            name={user?.nickName || "用户"}
+            src={user?.avatar}
+            size="sm"
+            mr={2}
+          />
+          <Text>{user?.nickName || "未命名用户"}</Text>
+        </Flex>
         <Text fontSize="xl">欢迎进入考勤管理系统</Text>
         <Button colorScheme="red" onClick={logout}>
           登出
         </Button>
-      </Box>
+      </Flex>
       {renderContentBasedOnRole()}
     </Box>
   );

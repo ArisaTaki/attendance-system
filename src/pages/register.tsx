@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { SaveUserProps, saveUser } from "../api/user.ts";
 import { getMajors } from "../api/major.ts";
 import { getColleages } from "../api/colleage.ts";
+import { checkMsgInfoList } from "../api/checkMsg.ts";
 
 export enum Role {
   Student = 3,
@@ -60,9 +61,16 @@ const Register = () => {
     });
   }, []);
 
+  useEffect(() => {
+    checkMsgInfoList().then((data) => {
+      console.log(data);
+    });
+  }, []);
+
   const phoneRegex = /^1[3-9]\d{9}$/;
+  // 修改为至少8位，超过8位也是可以的，包含大小写字母、数字及特殊字符
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
 
   const handleValidation = (name: string, value: string) => {
     if (name === "phone" && !phoneRegex.test(value)) {

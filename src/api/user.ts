@@ -88,3 +88,20 @@ export const getTeacherList = async (): Promise<User> => {
     throw new Error(error.message || "获取教师列表失败");
   }
 };
+
+export const getAllUsersList = async (number?: string): Promise<User> => {
+  const body = {
+    pageNum: 1,
+    pageSize: 20,
+    number: number,
+  };
+  try {
+    const teachers: AxiosResponse<User> = await axiosInstance.post(
+      "/user/list",
+      body
+    );
+    return teachers.data;
+  } catch (error: any) {
+    throw new Error(error.message || "获取全部用户列表失败");
+  }
+};

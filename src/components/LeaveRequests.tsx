@@ -1,87 +1,112 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-	Box,
-	Table,
-	Thead,
-	Tbody,
-	Tr,
-	Th,
-	Td,
-	TableContainer,
-	Input,
-	Button,
-	VStack,
-	Heading
-} from '@chakra-ui/react';
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Input,
+  Button,
+  VStack,
+  Heading,
+} from "@chakra-ui/react";
 
 // 定义请假请求的类型
 interface LeaveRequest {
-	id: number;
-	courseName: string;
-	leaveDate: string;
-	reason: string;
-	teacher: string;
-	status: string;
+  id: number;
+  courseName: string;
+  leaveDate: string;
+  reason: string;
+  teacher: string;
+  status: string;
 }
 
 const LeaveRequests: React.FC = () => {
-	const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
-	const [searchTerm, setSearchTerm] = useState('');
-	
-	const handleSearch = () => {
-		console.log('Searching for:', searchTerm);
-		// 这里应该是调用API来根据搜索条件过滤数据
-	};
-	
-	useEffect(() => {
-		const fetchLeaveRequests = async () => {
-			const mockData: LeaveRequest[] = [
-				{ id: 1, courseName: "Math 101", leaveDate: "2024-04-15", reason: "Medical Appointment", teacher: 'Mike', status: "Approved" },
-				{ id: 2, courseName: "Physics 202", leaveDate: "2024-04-20", reason: "Family Event", teacher: 'Tim', status: "Pending" },
-			];
-			setLeaveRequests(mockData);
-		};
-		
-		fetchLeaveRequests();
-	}, []);
-	
-	return (
-		<VStack spacing={4} p={5}>
-			<Heading>我的请假记录</Heading>
-			<Box display="flex" width="full" justifyContent="space-between" alignItems="center" mb={4}>
-				<Input
-					placeholder="搜索课程或教师"
-					value={searchTerm}
-					onChange={(e) => setSearchTerm(e.target.value)}
-				/>
-				<Button ml={10} colorScheme="blue" onClick={handleSearch}>搜索</Button>
-			</Box>
-			<TableContainer width="full">
-				<Table variant="simple">
-					<Thead>
-						<Tr>
-							<Th>课程名称</Th>
-							<Th>日期</Th>
-							<Th>请假原因</Th>
-							<Th>老师名称</Th>
-							<Th>状态</Th>
-						</Tr>
-					</Thead>
-					<Tbody>
-						{leaveRequests.map(request => (
-							<Tr key={request.id}>
-								<Td>{request.courseName}</Td>
-								<Td>{request.leaveDate}</Td>
-								<Td>{request.reason}</Td>
-								<Td>{request.teacher}</Td>
-								<Td>{request.status}</Td>
-							</Tr>
-						))}
-					</Tbody>
-				</Table>
-			</TableContainer>
-		</VStack>
-	);
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = () => {
+    console.log("Searching for:", searchTerm);
+    // 这里应该是调用API来根据搜索条件过滤数据
+  };
+
+  useEffect(() => {
+    const fetchLeaveRequests = async () => {
+      const mockData: LeaveRequest[] = [
+        {
+          id: 1,
+          courseName: "Math 101",
+          leaveDate: "2024-04-15",
+          reason: "Medical Appointment",
+          teacher: "Mike",
+          status: "Approved",
+        },
+        {
+          id: 2,
+          courseName: "Physics 202",
+          leaveDate: "2024-04-20",
+          reason: "Family Event",
+          teacher: "Tim",
+          status: "Pending",
+        },
+      ];
+      setLeaveRequests(mockData);
+    };
+
+    fetchLeaveRequests();
+  }, []);
+
+  return (
+    <VStack spacing={4} p={5}>
+      <Heading>我的请假记录</Heading>
+      <Box
+        display="flex"
+        width="full"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={4}
+      >
+        <Input
+          placeholder="搜索课程或教师"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <Button ml={10} colorScheme="blue" onClick={handleSearch}>
+          搜索
+        </Button>
+      </Box>
+      <TableContainer width="full">
+        <Table variant="simple">
+          <Thead>
+            <Tr backgroundColor="#e5e5e5">
+              <Th>课程名称</Th>
+              <Th>日期</Th>
+              <Th>请假原因</Th>
+              <Th>老师名称</Th>
+              <Th>状态</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {leaveRequests.map((request, index) => (
+              <Tr
+                key={request.id}
+                backgroundColor={index % 2 === 1 ? "#f0f0f0" : "white"}
+              >
+                <Td>{request.courseName}</Td>
+                <Td>{request.leaveDate}</Td>
+                <Td>{request.reason}</Td>
+                <Td>{request.teacher}</Td>
+                <Td>{request.status}</Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </VStack>
+  );
 };
 
 export default LeaveRequests;

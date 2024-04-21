@@ -10,7 +10,7 @@ export default defineConfig({
     proxy: {
       // 拦截所有可能的API请求
       "/api": {
-        target: "http://localhost:9000",
+        target: "http://localhost:9000/",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

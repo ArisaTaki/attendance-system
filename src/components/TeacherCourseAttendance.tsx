@@ -11,48 +11,21 @@ import {
   Th,
   Td,
   TableContainer,
-  Heading,
   Select,
+  Input,
 } from "@chakra-ui/react";
 import { getCourses } from "../api/course";
 import { SelectionProps } from "../pages/register";
-
-interface CourseAttendanceDetail {
-  teacherId: string;
-  courseId: string;
-  courseName: string;
-  startDate: string;
-  endDate: string;
-  absentCount: number;
-  totalNumber: number;
-}
+import { CheckListProps, CourseSign, getCheckList } from "../api/check";
 
 const TeacherCourseAttendance: React.FC = () => {
-  const [searchParams, setSearchParams] = useState({
-    teacherId: "",
+  const [searchParams, setSearchParams] = useState<CheckListProps>({
+    courseId: undefined,
+    teacherId: undefined,
+    teacherName: undefined,
   });
 
-  // Mock data for demonstration
-  const [details, setDetails] = useState<CourseAttendanceDetail[]>([
-    {
-      teacherId: "T20001",
-      courseId: "C1001",
-      courseName: "高等数学",
-      startDate: "2024-02-15",
-      endDate: "2024-02-15",
-      absentCount: 2,
-      totalNumber: 50,
-    },
-    {
-      teacherId: "T20002",
-      courseId: "C1002",
-      courseName: "线性代数",
-      startDate: "2024-02-15",
-      endDate: "2024-02-15",
-      absentCount: 3,
-      totalNumber: 50,
-    },
-  ]);
+  const [details, setDetails] = useState<CourseSign[]>([]);
 
   const [courses, setCourses] = useState<SelectionProps[]>([]);
 
@@ -61,11 +34,17 @@ const TeacherCourseAttendance: React.FC = () => {
     getCourses().then((data) => {
       setCourses(data.map((course) => ({ id: course.id, name: course.name })));
     });
+
+    getCheckList().then((data) => {
+      setDetails(data.list);
+    });
   }, []);
 
   const handleSearch = () => {
     console.log("Searching:", searchParams);
-    // TODO: Implement API call for actual data
+    getCheckList(searchParams).then((data) => {
+      setDetails(data.list);
+    });
   };
 
   const handleChange = (
@@ -77,15 +56,13 @@ const TeacherCourseAttendance: React.FC = () => {
 
   return (
     <Box p={4}>
-      <Heading size="lg" mb={4}>
-        教师课程考勤详细信息
-      </Heading>
-      <FormControl isRequired mb={4}>
+      <FormControl mb={4}>
         <FormLabel>课程</FormLabel>
         <Select
+          mb={4}
           placeholder="选择课程"
-          value={searchParams.teacherId}
-          name="teacherId"
+          value={searchParams.courseId}
+          name="courseId"
           onChange={handleChange}
         >
           {courses?.map((course) => (
@@ -94,6 +71,21 @@ const TeacherCourseAttendance: React.FC = () => {
             </option>
           ))}
         </Select>
+        <FormLabel>工号</FormLabel>
+        <Input
+          mb={4}
+          placeholder="输入教师工号"
+          value={searchParams.teacherId}
+          name="teacherId"
+          onChange={handleChange}
+        />
+        <FormLabel>姓名</FormLabel>
+        <Input
+          placeholder="输入教师姓名"
+          value={searchParams.teacherName}
+          name="teacherName"
+          onChange={handleChange}
+        />
       </FormControl>
       <Button onClick={handleSearch} colorScheme="blue">
         搜索
@@ -101,7 +93,7 @@ const TeacherCourseAttendance: React.FC = () => {
       <TableContainer mt={4}>
         <Table variant="simple">
           <Thead>
-            <Tr>
+            <Tr backgroundColor="#e5e5e5">
               <Th>教师工号</Th>
               <Th>课程编号</Th>
               <Th>课程名称</Th>
@@ -112,15 +104,18 @@ const TeacherCourseAttendance: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {details.map((detail) => (
-              <Tr key={detail.teacherId}>
+            {details.map((detail, index) => (
+              <Tr
+                key={detail.teacherId}
+                backgroundColor={index % 2 === 1 ? "#f0f0f0" : "white"}
+              >
                 <Td>{detail.teacherId}</Td>
                 <Td>{detail.courseId}</Td>
                 <Td>{detail.courseName}</Td>
-                <Td>{detail.startDate}</Td>
-                <Td>{detail.endDate}</Td>
+                <Td>{detail.startTime}</Td>
+                <Td>{detail.endTime}</Td>
                 <Td>{detail.absentCount}</Td>
-                <Td>{detail.totalNumber}</Td>
+                <Td>{detail.studentIds.split(",").length}</Td>
               </Tr>
             ))}
           </Tbody>

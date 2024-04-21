@@ -1,6 +1,6 @@
 import axiosInstance, { AxiosResponse } from "./axios";
 
-interface ColleageItemProps {
+export interface ColleageItemProps {
   pageNum: null | number;
   pageSize: null | number;
   id: number;

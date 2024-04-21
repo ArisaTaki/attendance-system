@@ -6,7 +6,6 @@ import {
   Input,
   useToast,
   VStack,
-  Image,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { login } from "../api/auth";
@@ -48,6 +47,9 @@ const Login = () => {
 
   return (
     <Box
+      backgroundImage="url('../../public/image.png')"
+      backgroundRepeat="no-repeat"
+      backgroundSize={"cover"}
       minH="100vh"
       minW="100vw"
       display="flex"
@@ -56,23 +58,16 @@ const Login = () => {
       justifyContent="center"
     >
       <Box
+        backgroundColor="white"
         w="sm"
-        mb={4}
+        pt={4}
         display="flex"
         alignItems="center"
         flexDirection="column"
       >
-        <Image
-          display={"block"}
-          src="../../public/logo.svg"
-          alt="Random Image"
-          objectFit="cover"
-          width="100%"
-          height="100%"
-        />
         <h1>考勤考核系统</h1>
       </Box>
-      <Box w="sm" p={8} boxShadow="md">
+      <Box w="sm" p={8} boxShadow="md" backgroundColor="white">
         <form onSubmit={handleLogin}>
           <VStack spacing={4}>
             <FormControl id="number">

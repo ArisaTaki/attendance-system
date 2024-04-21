@@ -12,7 +12,15 @@ interface CourseSelection {
   status: string;
 }
 
-const checkMsgInfoListById = async (
+export interface StudentAttendance {
+  studentId: string;
+  name: string;
+  present: number;
+  absent: number;
+  leave: number;
+}
+
+export const checkMsgInfoListById = async (
   account: string
 ): Promise<CourseSelection> => {
   try {
@@ -21,6 +29,21 @@ const checkMsgInfoListById = async (
       `/checkMsg/getCheckInfo?studentId=${account}&pageNum=1&pageSize=20`
     );
     return checkMsgInfoListById.data;
+  } catch (error: any) {
+    throw new Error(error.message || "获取消息列表失败");
+  }
+};
+
+export const checkMsgInfoList = async (
+  studentId?: number
+): Promise<StudentAttendance[]> => {
+  try {
+    const checkMsgInfoList = await axiosInstance.get(
+      studentId
+        ? `check/getCheckMsg?studentId=${studentId}`
+        : `/check/getCheckMsg`
+    );
+    return checkMsgInfoList.data;
   } catch (error: any) {
     throw new Error(error.message || "获取消息列表失败");
   }

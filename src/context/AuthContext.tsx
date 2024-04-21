@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (userLoginRes: UserLoginResponse) => {
     // 假设获取到的 token 是从登录响应中得来的
     localStorage.setItem("token", JSON.stringify(userLoginRes));
+
     setIsAuthenticated(true);
   };
 

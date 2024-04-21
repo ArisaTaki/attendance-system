@@ -1,6 +1,6 @@
 import axiosInstance, { AxiosResponse } from "./axios";
 
-interface MajorItemProps {
+export interface MajorItemProps {
   pageNum: null | number;
   pageSize: null | number;
   id: number;
