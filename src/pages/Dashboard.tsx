@@ -54,7 +54,12 @@ const Dashboard = () => {
       case Role.Student:
         return (
           <Box>
-            <Tabs index={studentOrTeacherTabIndex} onChange={handleTabsChange}>
+            <Tabs
+              isLazy
+              lazyBehavior="unmount"
+              index={studentOrTeacherTabIndex}
+              onChange={handleTabsChange}
+            >
               <TabList>
                 <Tab>考勤信息</Tab>
                 <Tab>请假管理</Tab>
@@ -85,7 +90,12 @@ const Dashboard = () => {
       case Role.Teacher:
         return (
           <Box>
-            <Tabs index={studentOrTeacherTabIndex} onChange={handleTabsChange}>
+            <Tabs
+              isLazy
+              lazyBehavior="unmount"
+              index={studentOrTeacherTabIndex}
+              onChange={handleTabsChange}
+            >
               <TabList>
                 <Tab>考勤信息管理</Tab>
                 <Tab>请假信息管理</Tab>
