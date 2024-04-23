@@ -54,7 +54,7 @@ const TeacherLeaveManagement: React.FC = () => {
     );
   };
 
-  const updateLeaveRequestStatus = (id: number, newStatus: "1" | "2") => {
+  const updateLeaveRequestStatus = (id: string, newStatus: "1" | "2") => {
     console.log(id, newStatus);
 
     const request = leaveRequests.find((req) => req.id === id);
@@ -118,8 +118,8 @@ const TeacherLeaveManagement: React.FC = () => {
               <Th>请假日期</Th>
               <Th>请假原因</Th>
               <Th>审批状态</Th>
-              <Th>操作</Th>
               {leaveRequests.some((item) => !!item.remark) && <Th>拒绝理由</Th>}
+              <Th>操作</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -131,9 +131,13 @@ const TeacherLeaveManagement: React.FC = () => {
                 <Td>{request.day}</Td>
                 <Td>{request.reason}</Td>
                 <Td>{leaveRequestStatus[Number(request.status)]}</Td>
+                {request.remark && <Td>{request.remark}</Td>}
                 <Td>
                   {request.status === "0" && (
                     <Select
+                      value={request.status}
+                      placeholder="选择操作"
+                      defaultValue="0"
                       onChange={(e) =>
                         updateLeaveRequestStatus(
                           request.id,
@@ -146,7 +150,6 @@ const TeacherLeaveManagement: React.FC = () => {
                     </Select>
                   )}
                 </Td>
-                {request.remark && <Td>{request.remark}</Td>}
               </Tr>
             ))}
           </Tbody>

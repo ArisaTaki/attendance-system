@@ -3,7 +3,7 @@ import axiosInstance, { AxiosResponse } from "./axios";
 export interface LeaveApplication {
   pageNum: null | number;
   pageSize: null | number;
-  id: number;
+  id: string;
   studentId: string;
   studentName: string;
   teacherId: string;
@@ -29,7 +29,7 @@ export interface LeaveListProps {
 }
 
 export interface changeStatusProps {
-  id: number;
+  id: string;
   status: string;
   remark?: string;
 }
