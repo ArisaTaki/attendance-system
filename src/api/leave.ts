@@ -3,7 +3,8 @@ import axiosInstance, { AxiosResponse } from "./axios";
 export interface LeaveApplication {
   pageNum: null | number;
   pageSize: null | number;
-  id: string;
+  id: bigint;
+  idString: string;
   studentId: string;
   studentName: string;
   teacherId: string;

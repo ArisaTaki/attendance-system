@@ -31,8 +31,6 @@ const TeacherAttendance: React.FC = () => {
 
   const user = getUserInfo();
 
-  console.log(user.account);
-
   useEffect(() => {
     getCheckList().then((data) => {
       setAttendanceRecords(data.list);
@@ -90,8 +88,8 @@ const TeacherAttendance: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {attendanceRecords.map((record) => (
-              <Tr key={record.courseId}>
+            {attendanceRecords.map((record, index) => (
+              <Tr key={index}>
                 <Td>{record.courseName}</Td>
                 <Td>{record.startTime}</Td>
                 <Td>{record.startTime}</Td>

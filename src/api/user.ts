@@ -12,23 +12,26 @@ export interface SaveUserProps {
   roleId: number;
 }
 
+export interface BaseUser {
+  pageNum: null | number;
+  pageSize: null | number;
+  id: number;
+  number: string;
+  name: string;
+  password: string;
+  phone: string | null;
+  email: string | null;
+  age: number | null;
+  avatar: string | null;
+  roleId: number;
+  majorId: number | null;
+  colleageId: number | null;
+  createTime: number;
+  classId: number | null;
+}
+
 export interface User {
-  list: {
-    pageNum: null | number;
-    pageSize: null | number;
-    id: number;
-    number: string;
-    name: string;
-    password: string;
-    phone: string | null;
-    email: string | null;
-    age: number | null;
-    avatar: string | null;
-    roleId: number;
-    majorId: number | null;
-    colleageId: number | null;
-    createTime: number;
-  }[];
+  list: BaseUser[];
   total: number;
 }
 
@@ -103,5 +106,26 @@ export const getAllUsersList = async (number?: string): Promise<User> => {
     return teachers.data;
   } catch (error: any) {
     throw new Error(error.message || "获取全部用户列表失败");
+  }
+};
+
+export const getStudentListByClass = async (
+  classId: number
+): Promise<BaseUser[]> => {
+  const formaData = new FormData();
+  formaData.append("classId", String(classId));
+  try {
+    const students: AxiosResponse<BaseUser[]> = await axiosInstance.post(
+      "/user/geStudentByClassId",
+      formaData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data", // 这一行通常是可选的，因为浏览器会自动设置正确的 Content-Type，包括boundary参数。
+        },
+      }
+    );
+    return students.data;
+  } catch (error: any) {
+    throw new Error(error.message || "获取学生列表失败");
   }
 };

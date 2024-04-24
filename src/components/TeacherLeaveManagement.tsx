@@ -21,9 +21,12 @@ import {
   Textarea,
   useDisclosure,
   ModalCloseButton,
+  Tooltip,
+  Icon,
 } from "@chakra-ui/react";
 import { useUser } from "../hook/useUser";
 import { changeStatus, getLeaveList, LeaveApplication } from "../api/leave";
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 const leaveRequestStatus = ["未审批", "已批准", "已拒绝"];
 
@@ -55,13 +58,13 @@ const TeacherLeaveManagement: React.FC = () => {
   };
 
   const updateLeaveRequestStatus = (id: string, newStatus: "1" | "2") => {
-    console.log(id, newStatus);
-
-    const request = leaveRequests.find((req) => req.id === id);
+    const request = leaveRequests.find((req) => req.idString === id);
     if (newStatus === "1") {
       changeStatus({ id, status: "1" }).then(() => {
         setLeaveRequests((prev) =>
-          prev.map((req) => (req.id === id ? { ...req, status: "1" } : req))
+          prev.map((req) =>
+            req.idString === id ? { ...req, status: "1" } : req
+          )
         );
       });
     } else {
@@ -72,13 +75,19 @@ const TeacherLeaveManagement: React.FC = () => {
 
   const submitRefusal = () => {
     if (currentRequest) {
-      setLeaveRequests((prev) =>
-        prev.map((req) =>
-          req.id === currentRequest.id
-            ? { ...req, status: "2", refuseReason: refuseReason }
-            : req
-        )
-      );
+      changeStatus({
+        id: currentRequest.idString,
+        status: "2",
+        remark: refuseReason,
+      }).then(() => {
+        setLeaveRequests((prev) =>
+          prev.map((req) =>
+            req.idString === currentRequest.idString
+              ? { ...req, status: "2", remark: refuseReason }
+              : req
+          )
+        );
+      });
     }
     onClose(); // 关闭模态窗口
   };
@@ -118,7 +127,6 @@ const TeacherLeaveManagement: React.FC = () => {
               <Th>请假日期</Th>
               <Th>请假原因</Th>
               <Th>审批状态</Th>
-              {leaveRequests.some((item) => !!item.remark) && <Th>拒绝理由</Th>}
               <Th>操作</Th>
             </Tr>
           </Thead>
@@ -130,17 +138,38 @@ const TeacherLeaveManagement: React.FC = () => {
                 <Td>{request.studentId}</Td>
                 <Td>{request.day}</Td>
                 <Td>{request.reason}</Td>
-                <Td>{leaveRequestStatus[Number(request.status)]}</Td>
-                {request.remark && <Td>{request.remark}</Td>}
                 <Td>
-                  {request.status === "0" && (
+                  <Box
+                    display={"flex"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                  >
+                    <Box mr={4}>
+                      {leaveRequestStatus[Number(request.status)]}
+                    </Box>
+                    {request.status === "2" && (
+                      <Tooltip
+                        label={request.remark || "无"}
+                        fontSize="md"
+                        hasArrow
+                        placement="right"
+                      >
+                        <span>
+                          <Icon as={InfoOutlineIcon} w={6} h={6} />
+                        </span>
+                      </Tooltip>
+                    )}
+                  </Box>
+                </Td>
+                <Td>
+                  {request.status === "0" ? (
                     <Select
                       value={request.status}
                       placeholder="选择操作"
                       defaultValue="0"
                       onChange={(e) =>
                         updateLeaveRequestStatus(
-                          request.id,
+                          request.idString,
                           e.target.value as "1" | "2"
                         )
                       }
@@ -148,6 +177,8 @@ const TeacherLeaveManagement: React.FC = () => {
                       <option value="1">批准</option>
                       <option value="2">拒绝</option>
                     </Select>
+                  ) : (
+                    <div>已处理，无需操作</div>
                   )}
                 </Td>
               </Tr>

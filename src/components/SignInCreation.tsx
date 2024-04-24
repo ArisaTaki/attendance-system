@@ -6,53 +6,65 @@ import {
   FormLabel,
   Input,
   Select,
-  Tag,
   VStack,
-  Wrap,
-  WrapItem,
   useToast,
 } from "@chakra-ui/react";
-import SignInInfo from "./SignInInfo.tsx";
+// import SignInInfo from "./SignInInfo.tsx";
 import { SelectionProps } from "../pages/register.tsx";
 import { getCourses } from "../api/course.ts";
-import { getStudentList } from "../api/user.ts";
+import studentClasses from "../constants/studentClasses.ts";
+import { getStudentListByClass } from "../api/user.ts";
+import { useUser } from "../hook/useUser.ts";
+import { createCheck } from "../api/check.ts";
 
 // 签到任务的类型定义
 interface SignInTask {
   startTime: string;
   endTime: string;
   location: string;
-  teacherName: string;
-  courseId?: number;
-  studentIds?: string;
+  teacherId: string;
+  courseId: string;
+  studentIds: string;
 }
 
+const formatDate = (date: Date): string => {
+  const yyyy = date.getFullYear();
+  const mmNumber = date.getMonth() + 1; // 月份从0开始计算
+  const ddNumber = date.getDate();
+  const hhNumber = date.getHours();
+  const minNumber = date.getMinutes();
+  const ssNumber = date.getSeconds();
+
+  // 将数字格式化为两位字符串
+  const mm = mmNumber < 10 ? "0" + mmNumber : mmNumber.toString();
+  const dd = ddNumber < 10 ? "0" + ddNumber : ddNumber.toString();
+  const hh = hhNumber < 10 ? "0" + hhNumber : hhNumber.toString();
+  const min = minNumber < 10 ? "0" + minNumber : minNumber.toString();
+  const ss = ssNumber < 10 ? "0" + ssNumber : ssNumber.toString();
+
+  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
+};
+
 const SignInCreation: React.FC = () => {
+  const { getUserInfo } = useUser();
+  const user = getUserInfo();
   const [signInTask, setSignInTask] = useState<SignInTask>({
     startTime: "",
     endTime: "",
     location: "",
-    teacherName: "",
-    courseId: undefined,
+    teacherId: user.account,
+    courseId: "",
     studentIds: "",
   });
-  const [showSignInfo, setShowSignInfo] = useState(false);
+  // const [showSignInfo, setShowSignInfo] = useState(false);
   const [courses, setCourses] = useState<SelectionProps[]>([]);
-  const [students, setStudents] = useState<SelectionProps[]>([]);
+  const [studentIdsString, setStudentIdsString] = useState("");
   const toast = useToast();
 
   useEffect(() => {
     // 在这里添加获取课程列表的逻辑
     getCourses().then((data) => {
       setCourses(data.map((course) => ({ id: course.id, name: course.name })));
-    });
-    getStudentList().then((data) => {
-      setStudents(
-        data.list.map((student) => ({
-          id: Number(student.number),
-          name: student.name,
-        }))
-      );
     });
   }, []);
 
@@ -61,38 +73,32 @@ const SignInCreation: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     if (name === "studentIds" && e.target instanceof HTMLSelectElement) {
-      // Handle multiple select for students
-      const selectedOptions = Array.from(
-        e.target.selectedOptions,
-        (option) => option.value
-      );
-
-      // 确保新选择的学生 ID 添加到现有 IDs 后面，而不是替换它们
-      setSignInTask((prev) => {
-        const existingIds = prev.studentIds ? prev.studentIds.split(",") : [];
-        const newIds = [...new Set([...existingIds, ...selectedOptions])]; // 使用 Set 来避免重复的 ID
-        return {
-          ...prev,
-          studentIds: newIds.join(","),
-        };
+      getStudentListByClass(Number(value)).then((data) => {
+        setStudentIdsString(data.map((student) => student.number).join(","));
       });
-    } else {
-      setSignInTask((prev) => ({ ...prev, [name]: value }));
     }
+    if (name === "startTime" || name === "endTime") {
+      setSignInTask((prev) => ({
+        ...prev,
+        [name]: formatDate(new Date(value)),
+      }));
+      return;
+    }
+    setSignInTask((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Replace with actual API call to create a sign-in task
-    console.log("Creating sign-in task:", signInTask);
-    toast({
-      title: "签到任务已发布",
-      description: "签到任务成功创建并且现在处于活跃状态。",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
+    createCheck({ ...signInTask, studentIds: studentIdsString }).then(() => {
+      toast({
+        title: "签到任务已发布",
+        description: "学生可以开始签到了！",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
     });
-    setShowSignInfo(true);
+    // setShowSignInfo(true);
   };
 
   return (
@@ -114,46 +120,19 @@ const SignInCreation: React.FC = () => {
           </Select>
         </FormControl>
         <FormControl isRequired>
-          <FormLabel>学生</FormLabel>
+          <FormLabel>上课班级</FormLabel>
           <Select
-            sx={{
-              minHeight: "200px",
-              overflowY: "auto",
-              padding: "4px",
-              "& option": {
-                padding: "4px",
-              },
-            }}
-            multiple
-            placeholder="选择学生"
-            value={signInTask.studentIds?.split(",")} // Splitting string into array for the value to match
+            placeholder="选择班级"
+            value={signInTask.studentIds}
             name="studentIds"
             onChange={handleChange}
           >
-            {students?.map((student) => (
-              <option key={student.id} value={student.id}>
-                {student.name}
+            {studentClasses?.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
               </option>
             ))}
           </Select>
-        </FormControl>
-        <Wrap>
-          {signInTask.studentIds?.split(",").map((id) => (
-            <WrapItem key={id}>
-              <Tag size="lg" borderRadius="full">
-                {students.find((student) => student.id === Number(id))?.name}
-              </Tag>
-            </WrapItem>
-          ))}
-        </Wrap>
-        <FormControl isRequired>
-          <FormLabel htmlFor="teacherName">教师姓名</FormLabel>
-          <Input
-            id="teacherName"
-            name="teacherName"
-            value={signInTask.teacherName}
-            onChange={handleChange}
-          />
         </FormControl>
         <FormControl isRequired>
           <FormLabel htmlFor="location">地点</FormLabel>
@@ -188,7 +167,7 @@ const SignInCreation: React.FC = () => {
           发布签到
         </Button>
       </VStack>
-      {showSignInfo && <SignInInfo />}
+      {/* {showSignInfo && <SignInInfo />} */}
     </Box>
   );
 };

@@ -29,6 +29,14 @@ export interface CheckListProps {
   teacherName?: string;
 }
 
+export interface CourseSignInRequest {
+  startTime: string;
+  endTime: string;
+  location: string;
+  teacherId: string;
+  courseId: string;
+  studentIds: string;
+}
 export const getCheckList = async (
   obj?: CheckListProps
 ): Promise<getCheckListRes> => {
@@ -45,5 +53,13 @@ export const getCheckList = async (
     return res.data;
   } catch (error: any) {
     throw new Error(error.message || "获取全部用户列表失败");
+  }
+};
+
+export const createCheck = async (check: CourseSignInRequest) => {
+  try {
+    await axiosInstance.post("/check/save", check);
+  } catch (error: any) {
+    throw new Error(error.message || "创建签到任务失败");
   }
 };
