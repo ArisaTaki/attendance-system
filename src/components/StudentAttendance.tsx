@@ -1,60 +1,103 @@
 import { useState, useEffect } from "react";
-import { Box, Text, VStack, Heading, Input, Button } from "@chakra-ui/react";
-// import { useUser } from "../hook/useUser";
-
-// 假设的考勤信息类型
-interface AttendanceRecord {
-  courseName: string;
-  checkInTime: string;
-  checkInLocation: string;
-  teacherName: string;
-}
+import {
+  Box,
+  Text,
+  VStack,
+  Heading,
+  Button,
+  FormControl,
+  FormLabel,
+  Select,
+} from "@chakra-ui/react";
+import { useUser } from "../hook/useUser";
+import { CourseSign, getCheckRecords } from "../api/check";
+import { getCourses } from "../api/course";
+import { getTeacherList } from "../api/user";
+import { SelectionProps } from "../pages/register";
 
 // 学生考勤信息组件
 const StudentAttendance = () => {
   // 考勤信息状态
-  const [attendanceRecords, setAttendanceRecords] = useState<
-    AttendanceRecord[]
-  >([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [attendanceRecords, setAttendanceRecords] = useState<CourseSign[]>([]);
+  const [formData, setFormData] = useState({
+    courseId: undefined,
+    teachId: undefined,
+  });
+  const { getUserInfo } = useUser();
+  const user = getUserInfo();
+  const [courses, setCourses] = useState<SelectionProps[]>([]);
+  const [teachers, setTeachers] = useState<SelectionProps[]>([]);
 
   // 模拟从服务器加载数据
   useEffect(() => {
-    const fetchData = async () => {
-      // 模拟数据
-      const mockData: AttendanceRecord[] = [
-        {
-          courseName: "Mathematics",
-          checkInTime: "2023-04-10 08:00",
-          checkInLocation: "Room 101",
-          teacherName: "Mr. Smith",
-        },
-        {
-          courseName: "Physics",
-          checkInTime: "2023-04-10 10:00",
-          checkInLocation: "Room 102",
-          teacherName: "Mrs. Doe",
-        },
-      ];
-      setAttendanceRecords(mockData);
-    };
-    fetchData();
-  }, []);
+    getCheckRecords({
+      studentId: user?.account,
+    }).then((data) => {
+      setAttendanceRecords(data);
+    });
+    // 在这里添加获取课程列表和教师列表的逻辑
+    getCourses().then((data) => {
+      setCourses(data.map((course) => ({ id: course.id, name: course.name })));
+    });
+    getTeacherList().then((data) => {
+      setTeachers(
+        data.list.map((teacher) => ({ id: teacher.id, name: teacher.name }))
+      );
+    });
+  }, [user?.account]);
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   // 搜索考勤记录
   const handleSearch = () => {
-    console.log("Searching for:", searchTerm);
-    // 这里应该是调用API来根据搜索条件过滤数据
+    getCheckRecords({
+      studentId: user?.account,
+      ...formData,
+    }).then((data) => {
+      setAttendanceRecords(data);
+    });
   };
 
   return (
     <VStack spacing={4} p={5}>
       <Heading>我的考勤记录</Heading>
-      <Input
-        placeholder="搜索课程或教师"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <FormControl isRequired>
+        <FormLabel>课程</FormLabel>
+        <Select
+          placeholder="选择你的课程"
+          value={formData.courseId}
+          name="courseId"
+          onChange={handleChange}
+        >
+          {courses?.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.name}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl isRequired mt={4}>
+        <FormLabel>教师</FormLabel>
+        <Select
+          placeholder="选择你的教师"
+          value={formData.teachId}
+          name="teachId"
+          onChange={handleChange}
+        >
+          {teachers?.map((teacher) => (
+            <option key={teacher.id} value={teacher.id}>
+              {teacher.name}
+            </option>
+          ))}
+        </Select>
+      </FormControl>
       <Button colorScheme="blue" onClick={handleSearch}>
         搜索
       </Button>
@@ -68,8 +111,8 @@ const StudentAttendance = () => {
           width="full"
         >
           <Text fontWeight="bold">{record.courseName}</Text>
-          <Text>时间: {record.checkInTime}</Text>
-          <Text>地点: {record.checkInLocation}</Text>
+          <Text>时间: {record.signTime}</Text>
+          <Text>地点: {record.signPlace}</Text>
           <Text>教师: {record.teacherName}</Text>
         </Box>
       ))}

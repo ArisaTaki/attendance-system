@@ -16,6 +16,7 @@ export interface CourseSign {
   studentIds: string;
   absentCount: number;
   signTime: string | null;
+  classId: number;
 }
 
 export interface getCheckListRes {
@@ -37,6 +38,13 @@ export interface CourseSignInRequest {
   courseId: string;
   studentIds: string;
 }
+
+export interface GetCheckRecordsProps {
+  studentId: string;
+  courseId?: string;
+  teacherId?: string;
+}
+
 export const getCheckList = async (
   obj?: CheckListProps
 ): Promise<getCheckListRes> => {
@@ -61,5 +69,21 @@ export const createCheck = async (check: CourseSignInRequest) => {
     await axiosInstance.post("/check/save", check);
   } catch (error: any) {
     throw new Error(error.message || "创建签到任务失败");
+  }
+};
+
+export const getCheckRecords = async (
+  obj: GetCheckRecordsProps
+): Promise<CourseSign[]> => {
+  try {
+    const objCourseId = obj.courseId ? `&courseId=${obj.courseId}` : "";
+    const objTeacherId = obj.teacherId ? `&teacherId=${obj.teacherId}` : "";
+    const baseUrl = `/check/getCheckRecords?studentId=${obj.studentId}`;
+    const res: AxiosResponse<CourseSign[]> = await axiosInstance.get(
+      `${baseUrl}${objCourseId}${objTeacherId}`
+    );
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.message || "获取签到记录失败");
   }
 };
