@@ -23,6 +23,16 @@ interface UserInfo {
   role: "学生" | "教师" | "管理员";
 }
 
+const sortUsersByRole = (users: UserInfo[]) => {
+  const rolePriority = {
+    管理员: 1,
+    教师: 2,
+    学生: 3,
+  };
+
+  return users.sort((a, b) => rolePriority[a.role] - rolePriority[b.role]);
+};
+
 const UserInfo: React.FC = () => {
   const [users, setUsers] = useState<UserInfo[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,21 +41,23 @@ const UserInfo: React.FC = () => {
   useEffect(() => {
     getAllUsersList().then((data) => {
       setUsers(
-        data.list.map((item) => {
-          return {
-            id: item.number,
-            name: item.name,
-            department:
-              colleague.find((col) => col.id === item.colleageId)?.name ?? "",
-            major: major.find((maj) => maj.id === item.majorId)?.name,
-            role:
-              item.roleId === 1
-                ? "管理员"
-                : item.roleId === 2
-                ? "教师"
-                : "学生",
-          };
-        })
+        sortUsersByRole(
+          data.list.map((item) => {
+            return {
+              id: item.number,
+              name: item.name,
+              department:
+                colleague.find((col) => col.id === item.colleageId)?.name ?? "",
+              major: major.find((maj) => maj.id === item.majorId)?.name,
+              role:
+                item.roleId === 1
+                  ? "管理员"
+                  : item.roleId === 2
+                  ? "教师"
+                  : "学生",
+            };
+          })
+        )
       );
     });
   }, [colleague, major]);
@@ -53,21 +65,23 @@ const UserInfo: React.FC = () => {
   const handleSearch = () => {
     getAllUsersList(searchTerm).then((data) => {
       setUsers(
-        data.list.map((item) => {
-          return {
-            id: item.number,
-            name: item.name,
-            department:
-              colleague.find((col) => col.id === item.colleageId)?.name ?? "",
-            major: major.find((maj) => maj.id === item.majorId)?.name,
-            role:
-              item.roleId === 1
-                ? "管理员"
-                : item.roleId === 2
-                ? "教师"
-                : "学生",
-          };
-        })
+        sortUsersByRole(
+          data.list.map((item) => {
+            return {
+              id: item.number,
+              name: item.name,
+              department:
+                colleague.find((col) => col.id === item.colleageId)?.name ?? "",
+              major: major.find((maj) => maj.id === item.majorId)?.name,
+              role:
+                item.roleId === 1
+                  ? "管理员"
+                  : item.roleId === 2
+                  ? "教师"
+                  : "学生",
+            };
+          })
+        )
       );
     });
   };

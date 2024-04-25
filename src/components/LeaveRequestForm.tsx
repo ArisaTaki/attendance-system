@@ -13,25 +13,21 @@ import {
 } from "@chakra-ui/react";
 import { getCourses } from "../api/course";
 import { getTeacherList } from "../api/user";
-import { SelectionProps } from "../pages/register";
+import { saveLeave, saveLeaveProps } from "../api/leave";
 
-interface FormData {
-  courseId?: number;
-  teachId?: number;
-  studentId: string;
+interface SelectionProps {
+  id: string;
   name: string;
-  leaveDate: string;
-  reason: string;
 }
 
 const LeaveRequestForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    courseId: undefined,
-    teachId: undefined,
-    leaveDate: "",
-    reason: "",
+  const [formData, setFormData] = useState<saveLeaveProps>({
+    courseId: "",
+    teacherId: "",
     studentId: "",
-    name: "",
+    studentName: "",
+    day: "",
+    reason: "",
   });
   const [courses, setCourses] = useState<SelectionProps[]>([]);
   const [teachers, setTeachers] = useState<SelectionProps[]>([]);
@@ -40,11 +36,16 @@ const LeaveRequestForm: React.FC = () => {
   useEffect(() => {
     // 在这里添加获取课程列表和教师列表的逻辑
     getCourses().then((data) => {
-      setCourses(data.map((course) => ({ id: course.id, name: course.name })));
+      setCourses(
+        data.map((course) => ({ id: String(course.id), name: course.name }))
+      );
     });
     getTeacherList().then((data) => {
       setTeachers(
-        data.list.map((teacher) => ({ id: teacher.id, name: teacher.name }))
+        data.list.map((teacher) => ({
+          id: teacher.number,
+          name: teacher.name,
+        }))
       );
     });
   }, []);
@@ -60,14 +61,14 @@ const LeaveRequestForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting leave request:", formData);
-    // 在这里添加API调用逻辑
-    toast({
-      title: "Leave Request Submitted",
-      description: "Your leave request has been submitted for approval.",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
+    saveLeave(formData).then(() => {
+      toast({
+        title: "请假已提交",
+        description: "你已经提交请假条给老师啦.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
     });
   };
 
@@ -94,8 +95,8 @@ const LeaveRequestForm: React.FC = () => {
           <FormLabel>教师</FormLabel>
           <Select
             placeholder="选择你的教师"
-            value={formData.teachId}
-            name="teachId"
+            value={formData.teacherId}
+            name="teacherId"
             onChange={handleChange}
           >
             {teachers?.map((teacher) => (
@@ -115,14 +116,18 @@ const LeaveRequestForm: React.FC = () => {
         </FormControl>
         <FormControl isRequired mt={4}>
           <FormLabel>姓名</FormLabel>
-          <Input name="name" value={formData.name} onChange={handleChange} />
+          <Input
+            name="studentName"
+            value={formData.studentName}
+            onChange={handleChange}
+          />
         </FormControl>
         <FormControl isRequired mt={4}>
           <FormLabel>请假时间</FormLabel>
           <Input
-            type="date"
-            name="leaveDate"
-            value={formData.leaveDate}
+            type="datetime-local"
+            name="day"
+            value={formData.day}
             onChange={handleChange}
           />
         </FormControl>

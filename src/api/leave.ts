@@ -25,14 +25,24 @@ export interface getLeaveListRes {
 
 export interface LeaveListProps {
   studentId?: string;
-  teacherId: string;
+  teacherId?: string;
   courseName?: string;
+  courseId?: string;
 }
 
 export interface changeStatusProps {
   id: string;
   status: string;
   remark?: string;
+}
+
+export interface saveLeaveProps {
+  courseId: string;
+  reason: string;
+  studentId: string;
+  studentName: string;
+  teacherId: string;
+  day: string;
 }
 
 export const getLeaveList = async (
@@ -61,5 +71,13 @@ export const changeStatus = async (obj: changeStatusProps): Promise<void> => {
     );
   } catch (error: any) {
     throw new Error(error.message || "更新请假状态失败");
+  }
+};
+
+export const saveLeave = async (obj: saveLeaveProps): Promise<void> => {
+  try {
+    await axiosInstance.post("/leave/save", obj);
+  } catch (error: any) {
+    throw new Error(error.message || "保存请假信息失败");
   }
 };

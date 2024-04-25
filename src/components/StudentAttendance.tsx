@@ -13,7 +13,11 @@ import { useUser } from "../hook/useUser";
 import { CourseSign, getCheckRecords } from "../api/check";
 import { getCourses } from "../api/course";
 import { getTeacherList } from "../api/user";
-import { SelectionProps } from "../pages/register";
+
+interface SelectionProps {
+  id: string;
+  name: string;
+}
 
 // 学生考勤信息组件
 const StudentAttendance = () => {
@@ -21,7 +25,7 @@ const StudentAttendance = () => {
   const [attendanceRecords, setAttendanceRecords] = useState<CourseSign[]>([]);
   const [formData, setFormData] = useState({
     courseId: undefined,
-    teachId: undefined,
+    teacherId: undefined,
   });
   const { getUserInfo } = useUser();
   const user = getUserInfo();
@@ -37,11 +41,13 @@ const StudentAttendance = () => {
     });
     // 在这里添加获取课程列表和教师列表的逻辑
     getCourses().then((data) => {
-      setCourses(data.map((course) => ({ id: course.id, name: course.name })));
+      setCourses(
+        data.map((course) => ({ id: String(course.id), name: course.name }))
+      );
     });
     getTeacherList().then((data) => {
       setTeachers(
-        data.list.map((teacher) => ({ id: teacher.id, name: teacher.name }))
+        data.list.map((teacher) => ({ id: teacher.number, name: teacher.name }))
       );
     });
   }, [user?.account]);
@@ -87,8 +93,8 @@ const StudentAttendance = () => {
         <FormLabel>教师</FormLabel>
         <Select
           placeholder="选择你的教师"
-          value={formData.teachId}
-          name="teachId"
+          value={formData.teacherId}
+          name="teacherId"
           onChange={handleChange}
         >
           {teachers?.map((teacher) => (
