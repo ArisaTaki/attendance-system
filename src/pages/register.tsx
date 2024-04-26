@@ -14,7 +14,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import AvatarUpload from "../components/AvatarUpload.tsx";
 import { useNavigate } from "react-router-dom";
 import { SaveUserProps, saveUser } from "../api/user.ts";
 import { getMajors } from "../api/major.ts";
@@ -40,7 +39,6 @@ const Register = () => {
     majorId: undefined,
     phone: "",
     email: "",
-    avatar: "",
     roleId: Role.Student,
   });
   const toast = useToast();
@@ -148,6 +146,19 @@ const Register = () => {
         </Heading>
         <form onSubmit={handleRegister}>
           <VStack spacing={4}>
+            <FormControl>
+              <FormLabel>学生还是老师？</FormLabel>
+              <RadioGroup
+                defaultValue={String(Role.Student)}
+                name="roleId"
+                onChange={(value) => handleChange(Number(value) as Role)}
+              >
+                <HStack spacing={8}>
+                  <Radio value={String(Role.Student)}>学生</Radio>
+                  <Radio value={String(Role.Teacher)}>老师</Radio>
+                </HStack>
+              </RadioGroup>
+            </FormControl>
             <FormControl isRequired>
               <FormLabel>
                 {userDetails.roleId === Role.Student ? "学号" : "工号"}
@@ -232,30 +243,6 @@ const Register = () => {
                 value={userDetails.email}
                 onChange={handleChange}
               />
-            </FormControl>
-            <FormControl>
-              <FormLabel>头像上传</FormLabel>
-              <AvatarUpload
-                onFileSelected={(file: string) =>
-                  setUserDetails((prev) => ({
-                    ...prev,
-                    avatar: file,
-                  }))
-                }
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>学生还是老师？</FormLabel>
-              <RadioGroup
-                defaultValue={String(Role.Student)}
-                name="roleId"
-                onChange={(value) => handleChange(Number(value) as Role)}
-              >
-                <HStack spacing={8}>
-                  <Radio value={String(Role.Student)}>学生</Radio>
-                  <Radio value={String(Role.Teacher)}>老师</Radio>
-                </HStack>
-              </RadioGroup>
             </FormControl>
             <Button
               colorScheme="blue"

@@ -18,10 +18,14 @@ const AvatarUpload: FC<AvatarUploadProps> = ({
   const { updateUserInfo } = useUser();
 
   useEffect(() => {
-    if (initPreview.startsWith("data:image/")) {
-      setPreview(initPreview);
+    if (!initPreview) {
+      setPreview("");
     } else {
-      setPreview(`data:image/png;base64,${initPreview}`);
+      if (initPreview.startsWith("data:image/")) {
+        setPreview(initPreview);
+      } else {
+        setPreview(`data:image/png;base64,${initPreview}`);
+      }
     }
   }, [initPreview]);
 
