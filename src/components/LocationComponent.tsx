@@ -1,23 +1,27 @@
 import React, { useState } from "react";
 import { Button, Box, Text } from "@chakra-ui/react";
 
-interface LocationState {
+export interface LocationState {
   latitude: number | null;
   longitude: number | null;
   address?: string; // 添加一个用于存储地址信息的状态
 }
 
-const LocationComponent: React.FC = () => {
-  const [location, setLocation] = useState<LocationState>({
-    latitude: null,
-    longitude: null,
-  });
+interface LocationComponentProps {
+  passLocation: (location: LocationState) => void;
+}
+
+const LocationComponent: React.FC<LocationComponentProps> = ({
+  passLocation,
+}) => {
   const [error, setError] = useState<string>("");
+  const [isLocationLoading, setIsLocationLoading] = useState<boolean>(false);
 
   const getLocation = () => {
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by your browser");
     } else {
+      setIsLocationLoading(true);
       navigator.geolocation.getCurrentPosition(success, handleError);
     }
   };
@@ -25,7 +29,6 @@ const LocationComponent: React.FC = () => {
   const success = (position: GeolocationPosition) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
-    setLocation({ latitude, longitude });
     setError("");
     fetchAddress(latitude, longitude); // 调用函数获取地址
   };
@@ -48,10 +51,8 @@ const LocationComponent: React.FC = () => {
       });
       const data = await response.json();
       if (data.address) {
-        setLocation((prevState) => ({
-          ...prevState,
-          address: data.display_name, // 设置地址
-        }));
+        setIsLocationLoading(false);
+        passLocation({ latitude, longitude, address: data.display_name }); // 传递地址信息
       }
     } catch (error) {
       console.error("Failed to fetch address:", error);
@@ -61,15 +62,13 @@ const LocationComponent: React.FC = () => {
 
   return (
     <Box p={4}>
-      <Button onClick={getLocation} colorScheme="blue">
-        Get Location
+      <Button
+        onClick={getLocation}
+        colorScheme="blue"
+        isLoading={isLocationLoading}
+      >
+        获取位置
       </Button>
-      {location.latitude && location.longitude && (
-        <Text mt={2}>
-          Latitude: {location.latitude}, Longitude: {location.longitude}
-        </Text>
-      )}
-      {location.address && <Text mt={2}>Address: {location.address}</Text>}
       {error && <Text color="red.500">{error}</Text>}
     </Box>
   );

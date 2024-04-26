@@ -11,7 +11,7 @@ export interface CourseSign {
   startTime: string;
   endTime: string;
   signPlace: string;
-  placeMsg: string;
+  palceMsg: string;
   createTime: number;
   studentIds: string;
   absentCount: number;
@@ -33,7 +33,8 @@ export interface CheckListProps {
 export interface CourseSignInRequest {
   startTime: string;
   endTime: string;
-  location: string;
+  palceMsg: string;
+  signPlace: string;
   teacherId: string;
   courseId: string;
   studentIds: string;

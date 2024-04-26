@@ -17,34 +17,18 @@ import { getStudentListByClass } from "../api/user.ts";
 import { useUser } from "../hook/useUser.ts";
 import { createCheck } from "../api/check.ts";
 import LocationComponent from "./LocationComponent.tsx";
+import { formatDate } from "../helper/format.ts";
 
 // 签到任务的类型定义
 interface SignInTask {
   startTime: string;
   endTime: string;
-  location: string;
+  signPlace: string;
+  palceMsg: string;
   teacherId: string;
   courseId: string;
   studentIds: string;
 }
-
-const formatDate = (date: Date): string => {
-  const yyyy = date.getFullYear();
-  const mmNumber = date.getMonth() + 1; // 月份从0开始计算
-  const ddNumber = date.getDate();
-  const hhNumber = date.getHours();
-  const minNumber = date.getMinutes();
-  const ssNumber = date.getSeconds();
-
-  // 将数字格式化为两位字符串
-  const mm = mmNumber < 10 ? "0" + mmNumber : mmNumber.toString();
-  const dd = ddNumber < 10 ? "0" + ddNumber : ddNumber.toString();
-  const hh = hhNumber < 10 ? "0" + hhNumber : hhNumber.toString();
-  const min = minNumber < 10 ? "0" + minNumber : minNumber.toString();
-  const ss = ssNumber < 10 ? "0" + ssNumber : ssNumber.toString();
-
-  return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
-};
 
 const SignInCreation: React.FC = () => {
   const { getUserInfo } = useUser();
@@ -52,7 +36,8 @@ const SignInCreation: React.FC = () => {
   const [signInTask, setSignInTask] = useState<SignInTask>({
     startTime: "",
     endTime: "",
-    location: "",
+    signPlace: "",
+    palceMsg: "",
     teacherId: user.account,
     courseId: "",
     studentIds: "",
@@ -137,13 +122,23 @@ const SignInCreation: React.FC = () => {
         </FormControl>
         <FormControl isRequired>
           <FormLabel htmlFor="location">地点</FormLabel>
-          <Input
-            id="location"
-            name="location"
-            value={signInTask.location}
-            onChange={handleChange}
-          />
-          <LocationComponent />
+          <Box display={"flex"} justifyContent="center" alignItems={"center"}>
+            <Input
+              id="location"
+              name="location"
+              value={signInTask.palceMsg}
+              onChange={handleChange}
+            />
+            <LocationComponent
+              passLocation={(e) => {
+                setSignInTask({
+                  ...signInTask,
+                  palceMsg: e.address ?? "",
+                  signPlace: `${e.latitude},${e.longitude}`,
+                });
+              }}
+            />
+          </Box>
         </FormControl>
         <FormControl isRequired>
           <FormLabel htmlFor="startTime">开始时间</FormLabel>

@@ -118,7 +118,7 @@ const StudentAttendance = () => {
         >
           <Text fontWeight="bold">{record.courseName}</Text>
           <Text>时间: {record.signTime}</Text>
-          <Text>地点: {record.signPlace}</Text>
+          <Text>地点: {record.palceMsg}</Text>
           <Text>教师: {record.teacherName}</Text>
         </Box>
       ))}

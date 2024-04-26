@@ -19,6 +19,7 @@ import { SaveUserProps, saveUser } from "../api/user.ts";
 import { getMajors } from "../api/major.ts";
 import { getColleages } from "../api/colleage.ts";
 import { checkMsgInfoList } from "../api/checkMsg.ts";
+import studentClasses from "../constants/studentClasses.ts";
 
 export enum Role {
   Student = 3,
@@ -37,6 +38,7 @@ const Register = () => {
     name: "",
     colleageId: undefined,
     majorId: undefined,
+    classId: undefined,
     phone: "",
     email: "",
     roleId: Role.Student,
@@ -218,6 +220,23 @@ const Register = () => {
                   {majors?.map((major) => (
                     <option key={major.id} value={major.id}>
                       {major.name}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+            {userDetails.roleId === Role.Student && (
+              <FormControl isRequired>
+                <FormLabel>班级</FormLabel>
+                <Select
+                  placeholder="选择你的班级"
+                  value={userDetails.classId}
+                  name="classId"
+                  onChange={handleChange}
+                >
+                  {studentClasses?.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
                     </option>
                   ))}
                 </Select>

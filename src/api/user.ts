@@ -10,6 +10,7 @@ export interface SaveUserProps {
   password: string;
   phone: string;
   roleId: number;
+  classId?: number;
 }
 
 export interface BaseUser {
