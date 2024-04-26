@@ -117,9 +117,9 @@ const StudentAttendance = () => {
           width="full"
         >
           <Text fontWeight="bold">{record.courseName}</Text>
-          <Text>时间: {record.signTime}</Text>
-          <Text>地点: {record.palceMsg}</Text>
-          <Text>教师: {record.teacherName}</Text>
+          <Text>签到时间: {record.signTime}</Text>
+          <Text>签到地点: {record.palceMsg}</Text>
+          <Text>上课教师: {record.teacherName}</Text>
         </Box>
       ))}
     </VStack>

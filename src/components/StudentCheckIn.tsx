@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Text, VStack, useToast } from "@chakra-ui/react";
-import { CourseSign, getCheckRecords } from "../api/check";
+import { checkSign, CourseSign, getCheckRecords } from "../api/check";
 import { useUser } from "../hook/useUser";
 import { haversineDistance } from "../helper/haversine";
 
@@ -64,13 +64,18 @@ const StudentCheckIn: React.FC = () => {
           isClosable: true,
         });
       } else {
-        toast({
-          title: "签到成功",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
+        checkSign({
+          checkId: currentTask.idString,
+          studentId: user?.account,
+        }).then(() => {
+          toast({
+            title: "签到成功",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+          setIsCheckedIn(true);
         });
-        setIsCheckedIn(true);
       }
     });
   };

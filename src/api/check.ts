@@ -4,6 +4,7 @@ export interface CourseSign {
   pageNum: null | number;
   pageSize: null | number;
   id: number;
+  idString: string;
   courseId: number;
   courseName: string;
   teacherId: string;
@@ -46,6 +47,11 @@ export interface GetCheckRecordsProps {
   teacherId?: string;
 }
 
+export interface CheckSignProps {
+  checkId: string;
+  studentId: string;
+}
+
 export const getCheckList = async (
   obj?: CheckListProps
 ): Promise<getCheckListRes> => {
@@ -86,5 +92,15 @@ export const getCheckRecords = async (
     return res.data;
   } catch (error: any) {
     throw new Error(error.message || "获取签到记录失败");
+  }
+};
+
+export const checkSign = async (obj: CheckSignProps) => {
+  try {
+    await axiosInstance.get(
+      `/checkMsg/sign?checkId=${obj.checkId}&studentId=${obj.studentId}`
+    );
+  } catch (error: any) {
+    throw new Error(error.message || "签到失败");
   }
 };
