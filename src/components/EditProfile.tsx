@@ -11,24 +11,32 @@ import { useUser } from "../hook/useUser";
 import AvatarUpload from "./AvatarUpload";
 import { updateUser } from "../api/user";
 
+interface UserData {
+  email: string;
+  phone: string;
+  number: string;
+  password?: string;
+}
+
 const EditProfile: React.FC = () => {
   const { getUserInfo, updateUserInfo } = useUser();
   const userInfo = getUserInfo();
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<UserData>({
     email: userInfo.email,
     phone: userInfo.phone,
-    avatar: userInfo.avatar,
-    password: "",
+    number: userInfo.account,
   });
   const toast = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
-
-  const handleAvatarChange = (base64: string) => {
-    setUserData({ ...userData, avatar: base64 });
+    if (name === "password" && value === "") {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...updatedUserData } = userData;
+      setUserData(updatedUserData);
+    } else {
+      setUserData({ ...userData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,7 +95,11 @@ const EditProfile: React.FC = () => {
         </FormControl>
         <FormControl>
           <FormLabel>头像</FormLabel>
-          <AvatarUpload onFileSelected={handleAvatarChange} />
+          <AvatarUpload
+            onFileSelected={() => {}}
+            initPreview={userInfo.avatar}
+            userId={userInfo.account}
+          />
         </FormControl>
         <Box width="full" display="flex" justifyContent="center">
           <Button mt={4} colorScheme="blue" type="submit">

@@ -38,8 +38,12 @@ export interface User {
 export interface UpdateProps {
   email: string;
   phone: string;
-  password: string;
-  avatar: string;
+  password?: string;
+}
+
+export interface UploadAvatarProps {
+  file: File;
+  userId: string;
 }
 
 export const saveUser = async (user: SaveUserProps) => {
@@ -127,5 +131,20 @@ export const getStudentListByClass = async (
     return students.data;
   } catch (error: any) {
     throw new Error(error.message || "获取学生列表失败");
+  }
+};
+
+export const uploadAvatar = async (avatar: UploadAvatarProps) => {
+  const formData = new FormData();
+  formData.append("file", avatar.file);
+  formData.append("userId", avatar.userId);
+  try {
+    await axiosInstance.post("/user/uploadAvatar", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  } catch (error: any) {
+    throw new Error(error.message || "上传头像失败");
   }
 };

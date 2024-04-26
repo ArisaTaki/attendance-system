@@ -16,6 +16,7 @@ import studentClasses from "../constants/studentClasses.ts";
 import { getStudentListByClass } from "../api/user.ts";
 import { useUser } from "../hook/useUser.ts";
 import { createCheck } from "../api/check.ts";
+import LocationComponent from "./LocationComponent.tsx";
 
 // 签到任务的类型定义
 interface SignInTask {
@@ -142,6 +143,7 @@ const SignInCreation: React.FC = () => {
             value={signInTask.location}
             onChange={handleChange}
           />
+          <LocationComponent />
         </FormControl>
         <FormControl isRequired>
           <FormLabel htmlFor="startTime">开始时间</FormLabel>
