@@ -45,6 +45,7 @@ const SignInCreation: React.FC = () => {
   // const [showSignInfo, setShowSignInfo] = useState(false);
   const [courses, setCourses] = useState<SelectionProps[]>([]);
   const [studentIdsString, setStudentIdsString] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
   useEffect(() => {
@@ -75,6 +76,7 @@ const SignInCreation: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     createCheck({ ...signInTask, studentIds: studentIdsString }).then(() => {
       toast({
         title: "签到任务已发布",
@@ -83,6 +85,7 @@ const SignInCreation: React.FC = () => {
         duration: 5000,
         isClosable: true,
       });
+      setIsLoading(false);
     });
     // setShowSignInfo(true);
   };
@@ -160,7 +163,7 @@ const SignInCreation: React.FC = () => {
             onChange={handleChange}
           />
         </FormControl>
-        <Button colorScheme="blue" type="submit">
+        <Button isLoading={isLoading} colorScheme="blue" type="submit">
           发布签到
         </Button>
       </VStack>

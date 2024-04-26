@@ -15,12 +15,14 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [number, setNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
   const { login: passLogin } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     try {
       const response = await login(number, password);
       if (response) {
@@ -31,6 +33,7 @@ const Login = () => {
           duration: 9000,
           isClosable: true,
         });
+        setLoading(false);
         passLogin(response);
         navigate("/dashboard");
       }
@@ -88,7 +91,13 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
-            <Button colorScheme="blue" w="full" mt={4} type="submit">
+            <Button
+              isLoading={loading}
+              colorScheme="blue"
+              w="full"
+              mt={4}
+              type="submit"
+            >
               登录
             </Button>
             <Button

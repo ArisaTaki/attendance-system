@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -6,10 +6,14 @@ import {
   FormLabel,
   Input,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import { useUser } from "../hook/useUser";
 import AvatarUpload from "./AvatarUpload";
 import { updateUser } from "../api/user";
+import { getColleages } from "../api/colleage";
+import { getMajors } from "../api/major";
+import studentClasses from "../constants/studentClasses";
 
 interface UserData {
   email: string;
@@ -26,7 +30,23 @@ const EditProfile: React.FC = () => {
     phone: userInfo.phone,
     number: userInfo.account,
   });
+  const [colleageId, setColleageId] = useState<{ id: number; name: string }[]>(
+    []
+  );
+  const [majors, setMajors] = useState<{ id: number; name: string }[]>();
+
   const toast = useToast();
+
+  console.log(userInfo);
+
+  useEffect(() => {
+    getColleages().then((data) => {
+      setColleageId(data.map((item) => ({ id: item.id, name: item.name })));
+    });
+    getMajors().then((data) => {
+      setMajors(data.map((major) => ({ id: major.id, name: major.name })));
+    });
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,8 +85,25 @@ const EditProfile: React.FC = () => {
 
   return (
     <Box p={4} maxWidth="500px" mx="auto">
+      <Text fontSize="md" mb={4}>
+        职业：{userInfo.roles[0] === "3" ? "学生" : "老师"}
+      </Text>
+      <Text fontSize="md" mb={4}>
+        学院：{colleageId.find((item) => item.id === userInfo.colleageId)?.name}
+      </Text>
+      {userInfo.roles[0] === "3" && (
+        <>
+          <Text fontSize="md" mb={4}>
+            专业：{majors?.find((item) => item.id === userInfo.majorId)?.name}
+          </Text>
+          <Text fontSize="md" mb={4}>
+            班级：
+            {studentClasses.find((item) => item.id === userInfo.classId)?.name}
+          </Text>
+        </>
+      )}
       <form onSubmit={handleSubmit}>
-        <FormControl isRequired>
+        <FormControl isRequired mb={4}>
           <FormLabel>邮箱</FormLabel>
           <Input
             name="email"
@@ -75,7 +112,7 @@ const EditProfile: React.FC = () => {
             onChange={handleInputChange}
           />
         </FormControl>
-        <FormControl isRequired>
+        <FormControl isRequired mb={4}>
           <FormLabel>电话</FormLabel>
           <Input
             name="phone"
@@ -84,7 +121,7 @@ const EditProfile: React.FC = () => {
             onChange={handleInputChange}
           />
         </FormControl>
-        <FormControl>
+        <FormControl mb={4}>
           <FormLabel>密码</FormLabel>
           <Input
             name="password"
@@ -93,7 +130,7 @@ const EditProfile: React.FC = () => {
             onChange={handleInputChange}
           />
         </FormControl>
-        <FormControl>
+        <FormControl mb={4}>
           <FormLabel>头像</FormLabel>
           <AvatarUpload
             onFileSelected={() => {}}

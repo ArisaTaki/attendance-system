@@ -32,7 +32,7 @@ const TeacherAttendance: React.FC = () => {
   const user = getUserInfo();
 
   useEffect(() => {
-    getCheckList().then((data) => {
+    getCheckList({ teacherId: user.account }).then((data) => {
       setAttendanceRecords(data.list);
     });
 
