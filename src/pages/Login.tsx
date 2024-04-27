@@ -38,6 +38,7 @@ const Login = () => {
         navigate("/dashboard");
       }
     } catch (error: any) {
+      setLoading(false);
       toast({
         title: "登录失败",
         description: error.message || "登录失败",
