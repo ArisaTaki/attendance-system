@@ -14,6 +14,7 @@ import {
 import { getCourses } from "../api/course";
 import { getTeacherList } from "../api/user";
 import { saveLeave, saveLeaveProps } from "../api/leave";
+import { useUser } from "../hook/useUser";
 
 interface SelectionProps {
   id: string;
@@ -32,6 +33,8 @@ const LeaveRequestForm: React.FC = () => {
   const [courses, setCourses] = useState<SelectionProps[]>([]);
   const [teachers, setTeachers] = useState<SelectionProps[]>([]);
   const toast = useToast();
+  const { getUserInfo } = useUser();
+  const user = getUserInfo();
 
   useEffect(() => {
     // 在这里添加获取课程列表和教师列表的逻辑
@@ -47,6 +50,11 @@ const LeaveRequestForm: React.FC = () => {
           name: teacher.name,
         }))
       );
+    });
+    setFormData({
+      ...formData,
+      studentName: user.nickName,
+      studentId: user.account,
     });
   }, []);
 
@@ -108,19 +116,11 @@ const LeaveRequestForm: React.FC = () => {
         </FormControl>
         <FormControl isRequired mt={4}>
           <FormLabel>学号</FormLabel>
-          <Input
-            name="studentId"
-            value={formData.studentId}
-            onChange={handleChange}
-          />
+          <Input disabled name="studentId" value={formData.studentId} />
         </FormControl>
         <FormControl isRequired mt={4}>
           <FormLabel>姓名</FormLabel>
-          <Input
-            name="studentName"
-            value={formData.studentName}
-            onChange={handleChange}
-          />
+          <Input disabled name="studentName" value={formData.studentName} />
         </FormControl>
         <FormControl isRequired mt={4}>
           <FormLabel>请假时间</FormLabel>
