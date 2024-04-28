@@ -4,13 +4,13 @@ import { checkSign, CourseSign, getCheckRecords } from "../api/check";
 import { useUser } from "../hook/useUser";
 import { haversineDistance } from "../helper/haversine";
 
-const isWithinTenMinutesOf = (inputTime: string): boolean => {
+const isDuringSignTime = (startTime: string, endTime: string): boolean => {
   const now = new Date().getTime(); // 当前时间的时间戳
-  const inputDate = new Date(inputTime).getTime(); // inputTime的时间戳
-  const diff = inputDate - now; // 计算差值
+  const startDate = new Date(startTime).getTime(); // startTime的时间戳
+  const endDate = new Date(endTime).getTime(); // endTime的时间戳
 
-  // 检查inputDate是否在当前时间之后，并且差值小于10分钟（600000毫秒）
-  return diff >= 0 && diff <= 600000;
+  // 检查当前时间是否处于签到时间范围内
+  return now >= startDate && now <= endDate;
 };
 
 /**
@@ -47,7 +47,7 @@ const StudentCheckIn: React.FC = () => {
     }).then((data) => {
       setCurrentTask(
         data.filter((record: CourseSign) => {
-          return isWithinTenMinutesOf(record.startTime);
+          return isDuringSignTime(record.startTime, record.endTime);
         })[0]
       );
     });
@@ -69,17 +69,17 @@ const StudentCheckIn: React.FC = () => {
       );
 
       const now = new Date().getTime();
-      const startTime = new Date(currentTask.startTime).getTime();
+      const enTime = new Date(currentTask.endTime).getTime();
 
       if (distance > 20) {
         toast({
           title: "签到失败",
-          description: "不在签到范围内",
+          description: `不在签到范围内, 距离签到地点${distance.toFixed(2)}米`,
           status: "error",
           duration: 3000,
           isClosable: true,
         });
-      } else if (now > startTime) {
+      } else if (now > enTime) {
         toast({
           title: "签到失败",
           description: "签到时间已过",
@@ -91,15 +91,25 @@ const StudentCheckIn: React.FC = () => {
         checkSign({
           checkId: currentTask.idString,
           studentId: user?.account,
-        }).then(() => {
-          toast({
-            title: "签到成功",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
+        })
+          .then(() => {
+            toast({
+              title: "签到成功",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+            });
+            setIsCheckedIn(true);
+          })
+          .catch(() => {
+            toast({
+              title: "签到失败",
+              description: "服务器出现问题，请稍后重试",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+            });
           });
-          setIsCheckedIn(true);
-        });
       }
     });
   };
