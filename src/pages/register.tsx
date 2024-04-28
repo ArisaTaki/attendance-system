@@ -31,7 +31,11 @@ export interface SelectionProps {
   id: number;
   name: string;
 }
+/**
+ * 注册页面组件
+ */
 const Register = () => {
+  // 状态和钩子函数
   const [userDetails, setUserDetails] = useState<SaveUserProps>({
     number: "",
     password: "",
@@ -50,6 +54,7 @@ const Register = () => {
   const [colleages, setColleageId] = useState<SelectionProps[]>();
   const [majors, setMajors] = useState<SelectionProps[]>();
 
+  // 获取学院和专业列表
   useEffect(() => {
     getMajors().then((data) => {
       setMajors(data.map((major) => ({ id: major.id, name: major.name })));
@@ -61,17 +66,24 @@ const Register = () => {
     });
   }, []);
 
+  // 检查消息信息列表
   useEffect(() => {
     checkMsgInfoList().then((data) => {
       console.log(data);
     });
   }, []);
 
+  // 手机号码正则表达式
   const phoneRegex = /^1[3-9]\d{9}$/;
-  // 修改为至少8位，超过8位也是可以的，包含大小写字母、数字及特殊字符
+  // 密码正则表达式
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
 
+  /**
+   * 表单验证
+   * @param name 字段名
+   * @param value 字段值
+   */
   const handleValidation = (name: string, value: string) => {
     if (name === "phone" && !phoneRegex.test(value)) {
       setError((prev) => ({ ...prev, phone: "无效的手机号码" }));
@@ -89,6 +101,10 @@ const Register = () => {
     }
   };
 
+  /**
+   * 表单字段变化处理函数
+   * @param e 事件对象
+   */
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -110,6 +126,10 @@ const Register = () => {
     }
   };
 
+  /**
+   * 注册按钮点击事件处理函数
+   * @param event 表单提交事件
+   */
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
     // 注册逻辑，调用API

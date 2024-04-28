@@ -1,5 +1,6 @@
 import axiosInstance, { AxiosResponse } from "./axios";
 
+// ColleageItemProps 是获取学院的参数结构
 export interface ColleageItemProps {
   pageNum: null | number;
   pageSize: null | number;
@@ -9,6 +10,7 @@ export interface ColleageItemProps {
   createTime: number;
 }
 
+// getColleages 是获取学院列表的请求函数
 export const getColleages = async (): Promise<ColleageItemProps[]> => {
   try {
     const colleages: AxiosResponse<ColleageItemProps[]> =

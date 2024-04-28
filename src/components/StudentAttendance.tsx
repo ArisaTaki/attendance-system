@@ -32,7 +32,6 @@ const StudentAttendance = () => {
   const [courses, setCourses] = useState<SelectionProps[]>([]);
   const [teachers, setTeachers] = useState<SelectionProps[]>([]);
 
-  // 模拟从服务器加载数据
   useEffect(() => {
     getCheckRecords({
       studentId: user?.account,

@@ -1,5 +1,6 @@
 import axiosInstance, { AxiosResponse } from "./axios";
 
+// MajorItemProps 是获取专业的参数结构
 export interface MajorItemProps {
   pageNum: null | number;
   pageSize: null | number;
@@ -9,6 +10,7 @@ export interface MajorItemProps {
   createTime: number;
 }
 
+// getMajors 是获取专业列表的请求函数
 export const getMajors = async (): Promise<MajorItemProps[]> => {
   try {
     const majors: AxiosResponse<MajorItemProps[]> = await axiosInstance.get(

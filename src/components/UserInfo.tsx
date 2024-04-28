@@ -33,11 +33,26 @@ const sortUsersByRole = (users: UserInfo[]) => {
   return users.sort((a, b) => rolePriority[a.role] - rolePriority[b.role]);
 };
 
+/**
+ * 用户信息组件
+ */
 const UserInfo: React.FC = () => {
+  /**
+   * 用户信息状态
+   */
   const [users, setUsers] = useState<UserInfo[]>([]);
+  /**
+   * 搜索关键词状态
+   */
   const [searchTerm, setSearchTerm] = useState("");
+  /**
+   * 同事和专业信息
+   */
   const { major, colleague } = useColleageMajor();
 
+  /**
+   * 获取所有用户列表并排序
+   */
   useEffect(() => {
     getAllUsersList().then((data) => {
       setUsers(
@@ -62,6 +77,9 @@ const UserInfo: React.FC = () => {
     });
   }, [colleague, major]);
 
+  /**
+   * 处理搜索操作
+   */
   const handleSearch = () => {
     getAllUsersList(searchTerm).then((data) => {
       setUsers(

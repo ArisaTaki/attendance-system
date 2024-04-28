@@ -1,42 +1,52 @@
+/* 设置根元素的样式 */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 1280px; /* 最大宽度为1280像素 */
+  margin: 0 auto; /* 水平居中 */
+  padding: 2rem; /* 上下左右各2个rem的内边距 */
+  text-align: center; /* 文本居中对齐 */
 }
 
+/* 设置logo的样式 */
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  height: 6em; /* 高度为6em */
+  padding: 1.5em; /* 上下左右各1.5em的内边距 */
+  will-change: filter; /* 声明将要改变的属性 */
+  transition: filter 300ms; /* 过渡效果，改变filter属性的过渡时间为300毫秒 */
 }
 
+/* 鼠标悬停在logo上的样式 */
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa); /* 添加阴影效果 */
+}
+
+/* 鼠标悬停在react类的logo上的样式 */
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa); /* 添加阴影效果 */
+}
+
+/* 定义logo旋转动画 */
 @keyframes logo-spin {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg); /* 从0度开始旋转 */
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg); /* 旋转到360度 */
   }
 }
 
+/* 在不偏好减少动画的情况下，为第二个a元素的logo添加旋转动画 */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+    animation: logo-spin infinite 20s linear; /* 无限循环旋转，持续时间为20秒，线性过渡 */
   }
 }
 
+/* 设置卡片的样式 */
 .card {
-  padding: 2em;
+  padding: 2em; /* 上下左右各2个em的内边距 */
 }
 
+/* 设置“阅读文档”的样式 */
 .read-the-docs {
-  color: #888;
+  color: #888; /* 文本颜色为#888 */
 }

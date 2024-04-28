@@ -1,5 +1,6 @@
 import axiosInstance from "./axios";
 
+// 签到消息列表
 interface CourseSelection {
   pageNum: null | number;
   pageSize: null | number;
@@ -12,6 +13,7 @@ interface CourseSelection {
   status: string;
 }
 
+// 学生考勤信息
 export interface StudentAttendance {
   studentId: string;
   name: string;
@@ -20,6 +22,7 @@ export interface StudentAttendance {
   leave: number;
 }
 
+// 获取签到消息列表，根据学生学号
 export const checkMsgInfoListById = async (
   account: string
 ): Promise<CourseSelection> => {
@@ -34,6 +37,7 @@ export const checkMsgInfoListById = async (
   }
 };
 
+// 获取签到消息列表
 export const checkMsgInfoList = async (
   studentId?: number
 ): Promise<StudentAttendance[]> => {

@@ -1,4 +1,5 @@
 :root {
+  /* 根元素样式 */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -14,15 +15,18 @@
 }
 
 a {
+  /* 链接样式 */
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
 }
 a:hover {
+  /* 链接悬停样式 */
   color: #535bf2;
 }
 
 body {
+  /* body元素样式 */
   margin: 0;
   display: flex;
   place-items: center;
@@ -31,11 +35,13 @@ body {
 }
 
 h1 {
+  /* h1元素样式 */
   font-size: 3.2em;
   line-height: 1.1;
 }
 
 button {
+  /* 按钮样式 */
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -47,22 +53,27 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
+  /* 按钮悬停样式 */
   border-color: #646cff;
 }
 button:focus,
 button:focus-visible {
+  /* 按钮焦点样式 */
   outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
+  /* 浅色主题样式 */
   :root {
     color: #213547;
     background-color: #ffffff;
   }
   a:hover {
+    /* 浅色主题链接悬停样式 */
     color: #747bff;
   }
   button {
+    /* 浅色主题按钮样式 */
     background-color: #f9f9f9;
   }
 }

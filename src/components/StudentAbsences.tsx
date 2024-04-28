@@ -16,12 +16,26 @@ interface AbsenceRecord {
   absences: number;
 }
 
+/**
+ * 学生缺勤组件
+ * @component
+ */
 const StudentAbsences: React.FC = () => {
+  /**
+   * 学生学号
+   */
   const [studentId, setStudentId] = useState("");
+
+  /**
+   * 缺勤记录
+   */
   const [absenceRecord, setAbsenceRecord] = useState<AbsenceRecord | null>(
     null
   );
 
+  /**
+   * 处理搜索事件
+   */
   const handleSearch = async () => {
     checkMsgInfoList(Number(studentId)).then((data) => {
       setAbsenceRecord({

@@ -1,5 +1,6 @@
 import axiosInstance, { AxiosResponse } from "./axios";
 
+// CourseSign 是签到任务的数据结构
 export interface CourseSign {
   pageNum: null | number;
   pageSize: null | number;
@@ -20,17 +21,20 @@ export interface CourseSign {
   classId: number;
 }
 
+// getCheckListRes 是获取签到任务列表的返回数据结构
 export interface getCheckListRes {
   list: CourseSign[];
   total: number;
 }
 
+// CheckListProps 是获取签到任务列表的参数结构
 export interface CheckListProps {
   courseId?: number;
   teacherId?: string;
   teacherName?: string;
 }
 
+// CourseSignInRequest 是创建签到任务的参数结构
 export interface CourseSignInRequest {
   startTime: string;
   endTime: string;
@@ -41,17 +45,20 @@ export interface CourseSignInRequest {
   studentIds: string;
 }
 
+// GetCheckRecordsProps 是获取签到记录的参数结构
 export interface GetCheckRecordsProps {
   studentId: string;
   courseId?: string;
   teacherId?: string;
 }
 
+// CheckSignProps 是签到的参数结构
 export interface CheckSignProps {
   checkId: string;
   studentId: string;
 }
 
+// getCheckList 是获取签到任务列表的 API 请求函数
 export const getCheckList = async (
   obj?: CheckListProps
 ): Promise<getCheckListRes> => {
@@ -71,6 +78,7 @@ export const getCheckList = async (
   }
 };
 
+// createCheck 是创建签到任务的 API 请求函数
 export const createCheck = async (check: CourseSignInRequest) => {
   try {
     await axiosInstance.post("/check/save", check);
@@ -79,6 +87,7 @@ export const createCheck = async (check: CourseSignInRequest) => {
   }
 };
 
+// getCheckRecords 是获取签到记录的 API 请求函数
 export const getCheckRecords = async (
   obj: GetCheckRecordsProps
 ): Promise<CourseSign[]> => {
@@ -95,6 +104,7 @@ export const getCheckRecords = async (
   }
 };
 
+// checkSign 是签到的 API 请求函数
 export const checkSign = async (obj: CheckSignProps) => {
   try {
     await axiosInstance.get(
