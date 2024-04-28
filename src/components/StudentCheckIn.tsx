@@ -71,7 +71,7 @@ const StudentCheckIn: React.FC = () => {
       const now = new Date().getTime();
       const enTime = new Date(currentTask.endTime).getTime();
 
-      if (distance > 20) {
+      if (distance > 100) {
         toast({
           title: "签到失败",
           description: `不在签到范围内, 距离签到地点${distance.toFixed(2)}米`,

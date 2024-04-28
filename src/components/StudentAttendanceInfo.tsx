@@ -76,8 +76,8 @@ const StudentAttendanceInfo: React.FC = () => {
                 <Td>{detail.studentId}</Td>
                 <Td>{detail.name}</Td>
                 <Td>{detail.present}</Td>
-                <Td>{detail.absent}</Td>
                 <Td>{detail.leave}</Td>
+                <Td>{detail.absent}</Td>
               </Tr>
             ))}
           </Tbody>
