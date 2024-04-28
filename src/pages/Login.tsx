@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [number, setNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
   const { login: passLogin } = useAuth();
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Login = () => {
   // 处理登录事件
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     try {
       const response = await login(number, password);
       if (response) {
@@ -34,12 +36,14 @@ const Login = () => {
           isClosable: true,
         });
         // 调用登录函数，将登录信息传递给上层组件
+        setLoading(false);
         passLogin(response);
         // 导航到仪表盘页面
         navigate("/dashboard");
       }
     } catch (error: any) {
       // 登录失败，显示错误提示
+      setLoading(false);
       toast({
         title: "登录失败",
         description: error.message || "登录失败",
@@ -93,7 +97,13 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
-            <Button colorScheme="blue" w="full" mt={4} type="submit">
+            <Button
+              isLoading={loading}
+              colorScheme="blue"
+              w="full"
+              mt={4}
+              type="submit"
+            >
               登录
             </Button>
             <Button

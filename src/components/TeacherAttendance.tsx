@@ -41,7 +41,7 @@ const TeacherAttendance: React.FC = () => {
 
   useEffect(() => {
     // 初始化加载考勤记录和课程选择项
-    getCheckList().then((data) => {
+    getCheckList({ teacherId: user.account }).then((data) => {
       setAttendanceRecords(data.list);
     });
 
