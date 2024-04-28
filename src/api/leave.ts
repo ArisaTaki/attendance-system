@@ -1,6 +1,5 @@
 import axiosInstance, { AxiosResponse } from "./axios";
 
-// LeaveApplication 是请假申请的数据结构
 export interface LeaveApplication {
   pageNum: null | number;
   pageSize: null | number;
@@ -19,13 +18,11 @@ export interface LeaveApplication {
   courseName: string;
 }
 
-// getLeaveListRes 是获取请假列表的返回数据结构
 export interface getLeaveListRes {
   list: LeaveApplication[];
   total: number;
 }
 
-// LeaveListProps 是获取请假列表的参数结构
 export interface LeaveListProps {
   studentId?: string;
   teacherId?: string;
@@ -33,14 +30,12 @@ export interface LeaveListProps {
   courseId?: string;
 }
 
-// changeStatusProps 是更新请假状态的参数结构
 export interface changeStatusProps {
   id: string;
   status: string;
   remark?: string;
 }
 
-// saveLeaveProps 是保存请假的参数结构
 export interface saveLeaveProps {
   courseId: string;
   reason: string;
@@ -50,7 +45,6 @@ export interface saveLeaveProps {
   day: string;
 }
 
-// getLeaveList 是获取请假列表的请求函数
 export const getLeaveList = async (
   obj?: LeaveListProps
 ): Promise<getLeaveListRes> => {
@@ -70,7 +64,6 @@ export const getLeaveList = async (
   }
 };
 
-// changeStatus 是更新请假状态的请求函数
 export const changeStatus = async (obj: changeStatusProps): Promise<void> => {
   try {
     await axiosInstance.get(
@@ -81,7 +74,6 @@ export const changeStatus = async (obj: changeStatusProps): Promise<void> => {
   }
 };
 
-// saveLeave 是保存请假的请求函数
 export const saveLeave = async (obj: saveLeaveProps): Promise<void> => {
   try {
     await axiosInstance.post("/leave/save", obj);

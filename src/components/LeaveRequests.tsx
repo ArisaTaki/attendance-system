@@ -28,11 +28,9 @@ interface SelectionProps {
   name: string;
 }
 
-// 定义请假申请状态的数组
 const leaveRequestStatus = ["未审批", "已批准", "已拒绝"];
 
 const LeaveRequests: React.FC = () => {
-  // 定义状态变量
   const [leaveRequests, setLeaveRequests] = useState<LeaveApplication[]>([]);
   const [teacherId, setTeacherId] = useState("");
   const [teachers, setTeachers] = useState<SelectionProps[]>([]);
@@ -41,12 +39,9 @@ const LeaveRequests: React.FC = () => {
   const [courses, setCourses] = useState<SelectionProps[]>([]);
   const { getUserInfo } = useUser();
 
-  // 获取用户信息
   const user = getUserInfo();
 
-  // 处理搜索事件
   const handleSearch = () => {
-    // 构造请求体
     const body: LeaveListProps = {
       studentId: user.account,
     };
@@ -56,26 +51,22 @@ const LeaveRequests: React.FC = () => {
     if (!!selectedCourseId) {
       body.courseId = selectedCourseId;
     }
-    // 发送请求获取请假列表
     getLeaveList(body).then((data) => {
       setLeaveRequests(data.list);
     });
   };
 
-  // 处理课程选择变化事件
   const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCourseId(e.target.value);
   };
 
   useEffect(() => {
-    // 获取课程列表
     getCourses().then((data) => {
       setCourses(
         data.map((course) => ({ id: String(course.id), name: course.name }))
       );
     });
 
-    // 获取教师列表
     getTeacherList().then((data) => {
       setTeachers(
         data.list.map((teacher) => ({
@@ -85,7 +76,6 @@ const LeaveRequests: React.FC = () => {
       );
     });
 
-    // 获取请假列表
     getLeaveList({ studentId: user.account }).then((data) => {
       setLeaveRequests(data.list);
     });

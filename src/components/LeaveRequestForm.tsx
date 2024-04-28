@@ -20,11 +20,7 @@ interface SelectionProps {
   name: string;
 }
 
-/**
- * 提交请假表单组件
- */
 const LeaveRequestForm: React.FC = () => {
-  // 状态管理表单数据
   const [formData, setFormData] = useState<saveLeaveProps>({
     courseId: "",
     teacherId: "",
@@ -33,18 +29,12 @@ const LeaveRequestForm: React.FC = () => {
     day: "",
     reason: "",
   });
-
-  // 状态管理课程列表
   const [courses, setCourses] = useState<SelectionProps[]>([]);
-
-  // 状态管理教师列表
   const [teachers, setTeachers] = useState<SelectionProps[]>([]);
-
-  // 使用 toast hook
   const toast = useToast();
 
   useEffect(() => {
-    // 在组件挂载时获取课程列表和教师列表的逻辑
+    // 在这里添加获取课程列表和教师列表的逻辑
     getCourses().then((data) => {
       setCourses(
         data.map((course) => ({ id: String(course.id), name: course.name }))
@@ -60,10 +50,6 @@ const LeaveRequestForm: React.FC = () => {
     });
   }, []);
 
-  /**
-   * 处理表单输入变化
-   * @param e - 输入事件对象
-   */
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -73,10 +59,6 @@ const LeaveRequestForm: React.FC = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  /**
-   * 提交表单
-   * @param e - 表单提交事件对象
-   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     saveLeave(formData).then(() => {

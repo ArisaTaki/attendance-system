@@ -30,9 +30,6 @@ interface SignInTask {
   studentIds: string;
 }
 
-/**
- * 签到创建组件
- */
 const SignInCreation: React.FC = () => {
   const { getUserInfo } = useUser();
   const user = getUserInfo();
@@ -50,19 +47,13 @@ const SignInCreation: React.FC = () => {
   const [studentIdsString, setStudentIdsString] = useState("");
   const toast = useToast();
 
-  /**
-   * 获取课程列表
-   */
   useEffect(() => {
+    // 在这里添加获取课程列表的逻辑
     getCourses().then((data) => {
       setCourses(data.map((course) => ({ id: course.id, name: course.name })));
     });
   }, []);
 
-  /**
-   * 处理输入框和下拉框的变化
-   * @param e - 事件对象
-   */
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -82,10 +73,6 @@ const SignInCreation: React.FC = () => {
     setSignInTask((prev) => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * 提交表单
-   * @param e - 事件对象
-   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     createCheck({ ...signInTask, studentIds: studentIdsString }).then(() => {

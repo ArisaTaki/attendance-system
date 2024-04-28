@@ -1,13 +1,4 @@
 // 哈弗辛公式，计算两点距离。
-/**
- * 计算两个地点之间的哈弗赛恩距离。
- *
- * @param lat1 第一个地点的纬度
- * @param lon1 第一个地点的经度
- * @param lat2 第二个地点的纬度
- * @param lon2 第二个地点的经度
- * @returns 两个地点之间的距离（以米为单位）
- */
 export const haversineDistance = (
   lat1: number,
   lon1: number,

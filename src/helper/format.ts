@@ -1,8 +1,3 @@
-/**
- * 格式化日期时间为字符串
- * @param date - 要格式化的日期时间
- * @returns 格式化后的日期时间字符串，格式为 "YYYY-MM-DD HH:MM:SS"
- */
 export const formatDate = (date: Date): string => {
   const yyyy = date.getFullYear();
   const mmNumber = date.getMonth() + 1; // 月份从0开始计算

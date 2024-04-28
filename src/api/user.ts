@@ -1,6 +1,5 @@
 import axiosInstance, { AxiosResponse } from "./axios";
 
-// SaveUserProps 是保存用户的参数结构
 export interface SaveUserProps {
   avatar?: string;
   colleageId?: number;
@@ -14,7 +13,6 @@ export interface SaveUserProps {
   classId?: number;
 }
 
-// BaseUser 是用户的基本信息结构
 export interface BaseUser {
   pageNum: null | number;
   pageSize: null | number;
@@ -33,26 +31,22 @@ export interface BaseUser {
   classId: number | null;
 }
 
-// User 是用户列表的数据结构
 export interface User {
   list: BaseUser[];
   total: number;
 }
 
-// UpdateProps 是更新用户的参数结构
 export interface UpdateProps {
   email: string;
   phone: string;
   password?: string;
 }
 
-// UploadAvatarProps 是上传头像的参数结构
 export interface UploadAvatarProps {
   file: File;
   userId: string;
 }
 
-// saveUser 是保存用户的请求函数
 export const saveUser = async (user: SaveUserProps) => {
   try {
     await axiosInstance.post("/user/save", user);
@@ -61,7 +55,6 @@ export const saveUser = async (user: SaveUserProps) => {
   }
 };
 
-// updateUser 是更新用户的请求函数
 export const updateUser = async (user: UpdateProps) => {
   try {
     await axiosInstance.post("/user/update", user);
@@ -70,7 +63,6 @@ export const updateUser = async (user: UpdateProps) => {
   }
 };
 
-// getStudentList 是获取学生用户信息的请求函数
 export const getStudentList = async (): Promise<User> => {
   const body = {
     roleId: 3,
@@ -88,7 +80,6 @@ export const getStudentList = async (): Promise<User> => {
   }
 };
 
-// getTeacherList 是获取教师用户信息的请求函数
 export const getTeacherList = async (): Promise<User> => {
   const body = {
     roleId: 2,
@@ -106,7 +97,6 @@ export const getTeacherList = async (): Promise<User> => {
   }
 };
 
-// getAllUsersList 是获取全部用户列表的请求函数
 export const getAllUsersList = async (number?: string): Promise<User> => {
   const body = {
     pageNum: 1,
@@ -124,7 +114,6 @@ export const getAllUsersList = async (number?: string): Promise<User> => {
   }
 };
 
-// getStudentListByClass是获取班级学生列表的请求函数
 export const getStudentListByClass = async (
   classId: number
 ): Promise<BaseUser[]> => {
@@ -146,7 +135,6 @@ export const getStudentListByClass = async (
   }
 };
 
-// uploadAvatar 是上传头像的请求函数
 export const uploadAvatar = async (avatar: UploadAvatarProps) => {
   const formData = new FormData();
   formData.append("file", avatar.file);

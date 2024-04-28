@@ -18,27 +18,15 @@ import { getCourses } from "../api/course";
 import { SelectionProps } from "../pages/register";
 import { CheckListProps, CourseSign, getCheckList } from "../api/check";
 
-/**
- * 教师课程考勤组件
- */
 const TeacherCourseAttendance: React.FC = () => {
-  /**
-   * 搜索参数状态
-   */
   const [searchParams, setSearchParams] = useState<CheckListProps>({
     courseId: undefined,
     teacherId: undefined,
     teacherName: undefined,
   });
 
-  /**
-   * 课程签到详情状态
-   */
   const [details, setDetails] = useState<CourseSign[]>([]);
 
-  /**
-   * 课程选择列表状态
-   */
   const [courses, setCourses] = useState<SelectionProps[]>([]);
 
   useEffect(() => {
@@ -52,9 +40,6 @@ const TeacherCourseAttendance: React.FC = () => {
     });
   }, []);
 
-  /**
-   * 处理搜索操作
-   */
   const handleSearch = () => {
     console.log("Searching:", searchParams);
     getCheckList(searchParams).then((data) => {
@@ -62,10 +47,6 @@ const TeacherCourseAttendance: React.FC = () => {
     });
   };
 
-  /**
-   * 处理输入框和下拉框的变化
-   * @param e 事件对象
-   */
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
