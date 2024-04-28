@@ -26,15 +26,24 @@ import StudentAttendanceInfo from "../components/StudentAttendanceInfo.tsx";
 import StudentCheckIn from "../components/StudentCheckIn.tsx";
 import EditProfile from "../components/EditProfile.tsx";
 
+/**
+ * 页面组件：仪表盘
+ */
 const Dashboard = () => {
   const { logout } = useAuth(); // 从上下文中获取登出函数
-  const [role, setRole] = useState<Role>();
-  const [studentOrTeacherTabIndex, setStudentOrTeacherTabIndex] = useState(0);
-  const [adminTabIndex, setAdminTabIndex] = useState(0);
-  const { getUserInfo } = useUser();
 
-  const user = getUserInfo();
+  const [role, setRole] = useState<Role>(); // 用户角色状态
+  const [studentOrTeacherTabIndex, setStudentOrTeacherTabIndex] = useState(0); // 学生或教师选项卡索引状态
+  const [adminTabIndex, setAdminTabIndex] = useState(0); // 管理员选项卡索引状态
 
+  const { getUserInfo } = useUser(); // 从上下文中获取用户信息函数
+
+  const user = getUserInfo(); // 获取用户信息
+
+  /**
+   * 处理选项卡变更事件
+   * @param index - 选项卡索引
+   */
   const handleTabsChange = (index: number) => {
     if (role === Role.Teacher || role === Role.Student) {
       setStudentOrTeacherTabIndex(index);
@@ -45,13 +54,20 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!!user) {
-      setRole(Number(user.roles[0]));
+      setRole(Number(user.roles[0])); // 设置用户角色
     }
   }, [user]);
 
+  /**
+   * 根据用户角色渲染内容
+   * @returns 根据用户角色渲染的内容
+   */
   const renderContentBasedOnRole = () => {
     switch (role as Role) {
       case Role.Student:
+        // 学生角色
+        // isLazy的作用是只有当选中某个选项卡时才渲染对应的内容，而不是一次性渲染所有选项卡的内容
+        // lazyBehavior="unmount"的作用是当切换选项卡时，不会保留之前选项卡的状态，而是销毁之前选项卡的内容
         return (
           <Box>
             <Tabs
@@ -176,6 +192,7 @@ const Dashboard = () => {
           登出
         </Button>
       </Flex>
+      {/* 这里的作用是调用根据用户角色渲染内容的函数 */}
       {renderContentBasedOnRole()}
     </Box>
   );

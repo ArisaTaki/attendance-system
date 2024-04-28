@@ -23,15 +23,24 @@ interface SelectionProps {
   name: string;
 }
 
+/**
+ * 教师考勤组件
+ */
 const TeacherAttendance: React.FC = () => {
+  // 存储考勤记录的状态
   const [attendanceRecords, setAttendanceRecords] = useState<CourseSign[]>([]);
+  // 存储课程选择项的状态
   const [courses, setCourses] = useState<SelectionProps[]>([]);
+  // 存储当前选中的课程ID的状态
   const [selectedCourseId, setSelectedCourseId] = useState("");
+  // 获取用户信息的钩子函数
   const { getUserInfo } = useUser();
 
+  // 获取当前用户信息
   const user = getUserInfo();
 
   useEffect(() => {
+    // 初始化加载考勤记录和课程选择项
     getCheckList().then((data) => {
       setAttendanceRecords(data.list);
     });
@@ -43,7 +52,9 @@ const TeacherAttendance: React.FC = () => {
     });
   }, []);
 
+  // 处理搜索按钮点击事件
   const handleSearch = () => {
+    // 根据选中的课程ID和教师ID获取考勤记录
     getCheckList({
       courseId: Number(selectedCourseId),
       teacherId: user.account,
@@ -52,6 +63,7 @@ const TeacherAttendance: React.FC = () => {
     });
   };
 
+  // 处理课程选择项变化事件
   const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCourseId(e.target.value);
   };
@@ -73,7 +85,7 @@ const TeacherAttendance: React.FC = () => {
         </Select>
       </FormControl>
       <Button onClick={handleSearch} mt={2} colorScheme="blue">
-        Search
+        搜索
       </Button>
       <TableContainer my={4}>
         <Table variant="simple">

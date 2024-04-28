@@ -19,11 +19,13 @@ const Login = () => {
   const { login: passLogin } = useAuth();
   const navigate = useNavigate();
 
+  // 处理登录事件
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       const response = await login(number, password);
       if (response) {
+        // 登录成功，显示成功提示
         toast({
           title: "登录成功",
           description: `您已成功登录，${response.userInfo.nickName}，欢迎回来！`,
@@ -31,10 +33,13 @@ const Login = () => {
           duration: 9000,
           isClosable: true,
         });
+        // 调用登录函数，将登录信息传递给上层组件
         passLogin(response);
+        // 导航到仪表盘页面
         navigate("/dashboard");
       }
     } catch (error: any) {
+      // 登录失败，显示错误提示
       toast({
         title: "登录失败",
         description: error.message || "登录失败",

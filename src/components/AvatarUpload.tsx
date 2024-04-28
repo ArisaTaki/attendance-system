@@ -9,14 +9,28 @@ interface AvatarUploadProps {
   userId: string;
 }
 
+/**
+ * AvatarUpload组件用于上传用户头像。
+ *
+ * @component
+ * @param {Object} props - 组件属性
+ * @param {Function} props.onFileSelected - 当文件被选中时调用的回调函数
+ * @param {string} props.initPreview - 初始预览图像的Base64编码字符串
+ * @param {string} props.userId - 用户ID
+ * @returns {JSX.Element} AvatarUpload组件
+ */
 const AvatarUpload: FC<AvatarUploadProps> = ({
   onFileSelected,
   initPreview,
   userId,
 }) => {
+  // 状态钩子
   const [preview, setPreview] = useState<string>("");
+
+  // 用户钩子
   const { updateUserInfo } = useUser();
 
+  // 初始化预览图像
   useEffect(() => {
     if (!initPreview) {
       setPreview("");
@@ -29,22 +43,27 @@ const AvatarUpload: FC<AvatarUploadProps> = ({
     }
   }, [initPreview]);
 
+  /**
+   * 处理文件变化事件
+   *
+   * @param {ChangeEvent<HTMLInputElement>} event - 文件变化事件对象
+   */
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
       uploadAvatar({ file, userId }).then(() => {
-        // Create a file reader
+        // 创建文件读取器
         const reader = new FileReader();
-        // When the file has been read...
+        // 当文件读取完成时...
         reader.onloadend = () => {
-          // Update the preview with the image data
+          // 使用图像数据更新预览图像
           const base64String = reader.result as string;
           setPreview(base64String);
           updateUserInfo({ avatar: base64String });
-          // Call onFileSelected with the base64 string
+          // 调用onFileSelected函数并传递Base64字符串
           onFileSelected(base64String);
         };
-        // Read the file as a Data URL (Base64)
+        // 以Data URL（Base64）格式读取文件
         reader.readAsDataURL(file);
       });
     }

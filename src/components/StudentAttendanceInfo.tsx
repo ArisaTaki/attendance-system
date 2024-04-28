@@ -13,17 +13,32 @@ import {
 } from "@chakra-ui/react";
 import { checkMsgInfoList, StudentAttendance } from "../api/checkMsg";
 
+/**
+ * 学生考勤信息组件
+ */
 const StudentAttendanceInfo: React.FC = () => {
+  /**
+   * 搜索参数
+   */
   const [searchParams, setSearchParams] = useState("");
 
+  /**
+   * 学生考勤详情
+   */
   const [details, setDetails] = useState<StudentAttendance[]>([]);
 
   useEffect(() => {
+    /**
+     * 获取学生考勤信息列表
+     */
     checkMsgInfoList().then((data) => {
       setDetails(data);
     });
   }, []);
 
+  /**
+   * 处理搜索操作
+   */
   const handleSearch = () => {
     checkMsgInfoList(Number(searchParams)).then((data) => {
       setDetails(data);

@@ -13,13 +13,34 @@ const isWithinTenMinutesOf = (inputTime: string): boolean => {
   return diff >= 0 && diff <= 600000;
 };
 
+/**
+ * 学生签到组件
+ */
 const StudentCheckIn: React.FC = () => {
+  /**
+   * 当前签到任务
+   */
   const [currentTask, setCurrentTask] = useState<CourseSign | null>(null);
+
+  /**
+   * 是否已签到
+   */
   const [isCheckedIn, setIsCheckedIn] = useState(false);
+
+  /**
+   * 获取用户信息
+   */
   const { getUserInfo } = useUser();
   const user = getUserInfo();
+
+  /**
+   * Toast 提示
+   */
   const toast = useToast();
 
+  /**
+   * 组件加载时获取签到记录
+   */
   useEffect(() => {
     getCheckRecords({
       studentId: user?.account,
@@ -32,6 +53,9 @@ const StudentCheckIn: React.FC = () => {
     });
   }, [user?.account]);
 
+  /**
+   * 处理签到操作
+   */
   const handleCheckIn = () => {
     if (!currentTask) return;
 

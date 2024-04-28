@@ -30,7 +30,11 @@ import { InfoOutlineIcon } from "@chakra-ui/icons";
 
 const leaveRequestStatus = ["未审批", "已批准", "已拒绝"];
 
+/**
+ * 教师请假管理组件
+ */
 const TeacherLeaveManagement: React.FC = () => {
+  // 状态管理
   const [leaveRequests, setLeaveRequests] = useState<LeaveApplication[]>([]);
   const [studentId, setStudentId] = useState("");
   const [courseName, setCourseName] = useState("");
@@ -41,14 +45,17 @@ const TeacherLeaveManagement: React.FC = () => {
   );
   const { getUserInfo } = useUser();
 
+  // 获取用户信息
   const user = getUserInfo();
 
+  // 在组件挂载时获取请假列表
   useEffect(() => {
     getLeaveList({ teacherId: user.account }).then((data) => {
       setLeaveRequests(data.list);
     });
   }, [user.account]);
 
+  // 处理搜索操作
   const handleSearch = () => {
     getLeaveList({ teacherId: user.account, studentId, courseName }).then(
       (data) => {
@@ -57,6 +64,7 @@ const TeacherLeaveManagement: React.FC = () => {
     );
   };
 
+  // 更新请假请求的状态
   const updateLeaveRequestStatus = (id: string, newStatus: "1" | "2") => {
     const request = leaveRequests.find((req) => req.idString === id);
     if (newStatus === "1") {
@@ -73,6 +81,7 @@ const TeacherLeaveManagement: React.FC = () => {
     }
   };
 
+  // 提交拒绝理由
   const submitRefusal = () => {
     if (currentRequest) {
       changeStatus({
@@ -94,6 +103,7 @@ const TeacherLeaveManagement: React.FC = () => {
 
   return (
     <Box p={4}>
+      {/* 搜索学生学号 */}
       <FormControl>
         <FormLabel htmlFor="search">搜索学生学号</FormLabel>
         <Input
@@ -104,6 +114,7 @@ const TeacherLeaveManagement: React.FC = () => {
           mb={4}
         />
       </FormControl>
+      {/* 搜索课程名称 */}
       <FormControl>
         <FormLabel htmlFor="search">搜索课程名称</FormLabel>
         <Input
@@ -114,10 +125,12 @@ const TeacherLeaveManagement: React.FC = () => {
           mb={4}
         />
       </FormControl>
+      {/* 搜索按钮 */}
       <Button onClick={handleSearch} colorScheme="blue">
         搜索
       </Button>
       <Box p={4} overflowX="auto">
+        {/* 请假列表 */}
         <Table mt={4} width="100%">
           <Thead>
             <Tr>
@@ -186,6 +199,7 @@ const TeacherLeaveManagement: React.FC = () => {
           </Tbody>
         </Table>
       </Box>
+      {/* 拒绝理由模态窗口 */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
