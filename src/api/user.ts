@@ -107,11 +107,15 @@ export const getTeacherList = async (): Promise<User> => {
 };
 
 // getAllUsersList 是获取全部用户列表的请求函数
-export const getAllUsersList = async (number?: string): Promise<User> => {
+export const getAllUsersList = async (
+  number?: string,
+  name?: string
+): Promise<User> => {
   const body = {
     pageNum: 1,
     pageSize: 20,
     number: number,
+    name: name,
   };
   try {
     const teachers: AxiosResponse<User> = await axiosInstance.post(

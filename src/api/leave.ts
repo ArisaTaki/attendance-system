@@ -54,11 +54,19 @@ export interface saveLeaveProps {
 export const getLeaveList = async (
   obj?: LeaveListProps
 ): Promise<getLeaveListRes> => {
-  const body = {
+  const body: any = {
     pageNum: 1,
     pageSize: 20,
-    ...obj,
   };
+  if (obj?.courseId) {
+    body.courseId = obj.courseId;
+  }
+  if (obj?.teacherId) {
+    body.teacherId = obj.teacherId;
+  }
+  if (obj?.studentId) {
+    body.studentId = obj.studentId;
+  }
   try {
     const res: AxiosResponse<getLeaveListRes> = await axiosInstance.post(
       "/leave/list",

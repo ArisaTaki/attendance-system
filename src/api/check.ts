@@ -62,11 +62,19 @@ export interface CheckSignProps {
 export const getCheckList = async (
   obj?: CheckListProps
 ): Promise<getCheckListRes> => {
-  const body = {
+  const body: any = {
     pageNum: 1,
     pageSize: 20,
-    ...obj,
   };
+  if (obj?.courseId) {
+    body.courseId = obj.courseId;
+  }
+  if (obj?.teacherId) {
+    body.teacherId = obj.teacherId;
+  }
+  if (obj?.teacherName) {
+    body.teacherName = obj.teacherName;
+  }
   try {
     const res: AxiosResponse<getCheckListRes> = await axiosInstance.post(
       "/check/list",

@@ -41,6 +41,10 @@ const LeaveRequestForm: React.FC = () => {
   // 状态管理教师列表
   const [teachers, setTeachers] = useState<SelectionProps[]>([]);
 
+  const [successSubmit, setSuccessSubmit] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
   // 使用 toast hook
   const toast = useToast();
   const { getUserInfo } = useUser();
@@ -87,7 +91,10 @@ const LeaveRequestForm: React.FC = () => {
    */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     saveLeave(formData).then(() => {
+      setSuccessSubmit(true);
+      setLoading(false);
       toast({
         title: "请假已提交",
         description: "你已经提交请假条给老师啦.",
@@ -158,8 +165,15 @@ const LeaveRequestForm: React.FC = () => {
           />
         </FormControl>
         <Box width="full" display="flex" justifyContent="between">
-          <Button mt={4} mx="auto" colorScheme="blue" type="submit">
-            Submit
+          <Button
+            isLoading={loading}
+            isDisabled={successSubmit}
+            mt={4}
+            mx="auto"
+            colorScheme="blue"
+            type="submit"
+          >
+            {successSubmit ? "已提交" : "提交"}
           </Button>
         </Box>
       </form>

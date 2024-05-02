@@ -114,6 +114,7 @@ const TeacherCourseAttendance: React.FC = () => {
           <Thead>
             <Tr backgroundColor="#e5e5e5">
               <Th>教师工号</Th>
+              <Th>教师姓名</Th>
               <Th>课程编号</Th>
               <Th>课程名称</Th>
               <Th>开始时间</Th>
@@ -129,6 +130,7 @@ const TeacherCourseAttendance: React.FC = () => {
                 backgroundColor={index % 2 === 1 ? "#f0f0f0" : "white"}
               >
                 <Td>{detail.teacherId}</Td>
+                <Td>{detail.teacherName}</Td>
                 <Td>{detail.courseId}</Td>
                 <Td>{detail.courseName}</Td>
                 <Td>{detail.startTime}</Td>

@@ -27,6 +27,12 @@ import {
 import { useUser } from "../hook/useUser";
 import { changeStatus, getLeaveList, LeaveApplication } from "../api/leave";
 import { InfoOutlineIcon } from "@chakra-ui/icons";
+import { getCourses } from "../api/course";
+
+interface SelectionProps {
+  id: string;
+  name: string;
+}
 
 const leaveRequestStatus = ["未审批", "已批准", "已拒绝"];
 
@@ -37,12 +43,13 @@ const TeacherLeaveManagement: React.FC = () => {
   // 状态管理
   const [leaveRequests, setLeaveRequests] = useState<LeaveApplication[]>([]);
   const [studentId, setStudentId] = useState("");
-  const [courseName, setCourseName] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [refuseReason, setRefuseReason] = useState("");
   const [currentRequest, setCurrentRequest] = useState<LeaveApplication | null>(
     null
   );
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const [courses, setCourses] = useState<SelectionProps[]>([]);
   const { getUserInfo } = useUser();
 
   // 获取用户信息
@@ -53,15 +60,26 @@ const TeacherLeaveManagement: React.FC = () => {
     getLeaveList({ teacherId: user.account }).then((data) => {
       setLeaveRequests(data.list);
     });
+    getCourses().then((data) => {
+      setCourses(
+        data.map((course) => ({ id: String(course.id), name: course.name }))
+      );
+    });
   }, [user.account]);
 
   // 处理搜索操作
   const handleSearch = () => {
-    getLeaveList({ teacherId: user.account, studentId, courseName }).then(
-      (data) => {
-        setLeaveRequests(data.list);
-      }
-    );
+    getLeaveList({
+      teacherId: user.account,
+      studentId,
+      courseId: selectedCourseId,
+    }).then((data) => {
+      setLeaveRequests(data.list);
+    });
+  };
+
+  const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCourseId(e.target.value);
   };
 
   // 更新请假请求的状态
@@ -115,15 +133,19 @@ const TeacherLeaveManagement: React.FC = () => {
         />
       </FormControl>
       {/* 搜索课程名称 */}
-      <FormControl>
-        <FormLabel htmlFor="search">搜索课程名称</FormLabel>
-        <Input
-          id="search"
-          type="text"
-          value={courseName}
-          onChange={(e) => setCourseName(e.target.value)}
-          mb={4}
-        />
+      <FormControl isRequired mb={4}>
+        <FormLabel>课程</FormLabel>
+        <Select
+          placeholder="选择课程"
+          value={selectedCourseId}
+          onChange={handleCourseChange}
+        >
+          {courses.map((course) => (
+            <option key={course.id} value={course.id}>
+              {course.name}
+            </option>
+          ))}
+        </Select>
       </FormControl>
       {/* 搜索按钮 */}
       <Button onClick={handleSearch} colorScheme="blue">

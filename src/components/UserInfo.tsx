@@ -45,6 +45,7 @@ const UserInfo: React.FC = () => {
    * 搜索关键词状态
    */
   const [searchTerm, setSearchTerm] = useState("");
+  const [name, setName] = useState("");
   /**
    * 同事和专业信息
    */
@@ -81,7 +82,7 @@ const UserInfo: React.FC = () => {
    * 处理搜索操作
    */
   const handleSearch = () => {
-    getAllUsersList(searchTerm).then((data) => {
+    getAllUsersList(searchTerm, name).then((data) => {
       setUsers(
         sortUsersByRole(
           data.list.map((item) => {
@@ -107,9 +108,15 @@ const UserInfo: React.FC = () => {
   return (
     <Box p={4}>
       <Input
-        placeholder="按学号/工号或姓名搜索"
+        placeholder="请输入学号/工号"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        mb={4}
+      />
+      <Input
+        placeholder="请输入名字"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         mb={4}
       />
       <Button onClick={handleSearch} colorScheme="blue">

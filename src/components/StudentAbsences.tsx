@@ -37,7 +37,7 @@ const StudentAbsences: React.FC = () => {
    * 处理搜索事件
    */
   const handleSearch = async () => {
-    checkMsgInfoList(Number(studentId)).then((data) => {
+    checkMsgInfoList(studentId).then((data) => {
       setAbsenceRecord({
         studentId: studentId,
         studentName: data[0].name,

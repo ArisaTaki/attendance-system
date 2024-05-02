@@ -39,7 +39,7 @@ export const checkMsgInfoListById = async (
 
 // 获取签到消息列表
 export const checkMsgInfoList = async (
-  studentId?: number
+  studentId?: string
 ): Promise<StudentAttendance[]> => {
   try {
     const checkMsgInfoList = await axiosInstance.get(

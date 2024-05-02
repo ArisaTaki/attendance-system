@@ -49,6 +49,7 @@ const SignInCreation: React.FC = () => {
   const [courses, setCourses] = useState<SelectionProps[]>([]);
   const [studentIdsString, setStudentIdsString] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const toast = useToast();
 
   /**
@@ -99,6 +100,7 @@ const SignInCreation: React.FC = () => {
         isClosable: true,
       });
       setIsLoading(false);
+      setDisableButton(true);
     });
     // setShowSignInfo(true);
   };
@@ -176,8 +178,13 @@ const SignInCreation: React.FC = () => {
             onChange={handleChange}
           />
         </FormControl>
-        <Button isLoading={isLoading} colorScheme="blue" type="submit">
-          发布签到
+        <Button
+          isDisabled={disableButton}
+          isLoading={isLoading}
+          colorScheme="blue"
+          type="submit"
+        >
+          {disableButton ? "已发布" : "发布签到"}
         </Button>
       </VStack>
       {/* {showSignInfo && <SignInInfo />} */}

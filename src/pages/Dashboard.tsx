@@ -145,7 +145,7 @@ const Dashboard = () => {
               onChange={handleTabsChange}
             >
               <TabList>
-                <Tab>查看学生/老师信息</Tab>
+                <Tab>查看学生/教师信息</Tab>
                 <Tab>查看学生的考勤信息</Tab>
                 <Tab>教师的课程考勤信息</Tab>
               </TabList>

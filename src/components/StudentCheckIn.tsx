@@ -38,6 +38,8 @@ const StudentCheckIn: React.FC = () => {
    */
   const toast = useToast();
 
+  const [loading, setLoading] = useState(false);
+
   /**
    * 组件加载时获取签到记录
    */
@@ -47,7 +49,10 @@ const StudentCheckIn: React.FC = () => {
     }).then((data) => {
       setCurrentTask(
         data.filter((record: CourseSign) => {
-          return isDuringSignTime(record.startTime, record.endTime);
+          return (
+            isDuringSignTime(record.startTime, record.endTime) &&
+            !record.signTime
+          );
         })[0]
       );
     });
@@ -58,6 +63,7 @@ const StudentCheckIn: React.FC = () => {
    */
   const handleCheckIn = () => {
     if (!currentTask) return;
+    setLoading(true);
 
     navigator.geolocation.getCurrentPosition((position) => {
       const [lat, lon] = currentTask.signPlace.split(",").map(Number);
@@ -79,6 +85,7 @@ const StudentCheckIn: React.FC = () => {
           duration: 3000,
           isClosable: true,
         });
+        setLoading(false);
       } else if (now > enTime) {
         toast({
           title: "签到失败",
@@ -87,6 +94,7 @@ const StudentCheckIn: React.FC = () => {
           duration: 3000,
           isClosable: true,
         });
+        setLoading(false);
       } else {
         checkSign({
           checkId: currentTask.idString,
@@ -100,6 +108,7 @@ const StudentCheckIn: React.FC = () => {
               isClosable: true,
             });
             setIsCheckedIn(true);
+            setLoading(false);
           })
           .catch(() => {
             toast({
@@ -109,6 +118,7 @@ const StudentCheckIn: React.FC = () => {
               duration: 3000,
               isClosable: true,
             });
+            setLoading(false);
           });
       }
     });
@@ -123,6 +133,8 @@ const StudentCheckIn: React.FC = () => {
           <Text>开始时间: {currentTask.startTime}</Text>
           <Text>结束时间: {currentTask.endTime}</Text>
           <Button
+            isLoading={loading}
+            isDisabled={isCheckedIn}
             colorScheme="blue"
             onClick={handleCheckIn}
             disabled={isCheckedIn}

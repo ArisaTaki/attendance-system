@@ -62,9 +62,9 @@ const StudentAttendanceInfo: React.FC = () => {
             <Tr backgroundColor="#e5e5e5">
               <Th>学生学号</Th>
               <Th>学生名</Th>
-              <Th>缺勤次数</Th>
               <Th>考勤次数</Th>
               <Th>请假次数</Th>
+              <Th>缺勤次数</Th>
             </Tr>
           </Thead>
           <Tbody>
