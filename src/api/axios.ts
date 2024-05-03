@@ -17,7 +17,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 5000,
+  timeout: 20000,
 });
 
 // 请求拦截器

@@ -23,6 +23,7 @@ import {
   ModalCloseButton,
   Tooltip,
   Icon,
+  Spinner,
 } from "@chakra-ui/react";
 import { useUser } from "../hook/useUser";
 import { changeStatus, getLeaveList, LeaveApplication } from "../api/leave";
@@ -166,58 +167,66 @@ const TeacherLeaveManagement: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {leaveRequests.map((request) => (
-              <Tr key={request.id}>
-                <Td>{request.courseName}</Td>
-                <Td>{request.studentName}</Td>
-                <Td>{request.studentId}</Td>
-                <Td>{request.day}</Td>
-                <Td>{request.reason}</Td>
-                <Td>
-                  <Box
-                    display={"flex"}
-                    justifyContent={"center"}
-                    alignItems={"center"}
-                  >
-                    <Box mr={4}>
-                      {leaveRequestStatus[Number(request.status)]}
-                    </Box>
-                    {request.status === "2" && (
-                      <Tooltip
-                        label={request.remark || "无"}
-                        fontSize="md"
-                        hasArrow
-                        placement="right"
-                      >
-                        <span>
-                          <Icon as={InfoOutlineIcon} w={6} h={6} />
-                        </span>
-                      </Tooltip>
-                    )}
-                  </Box>
-                </Td>
-                <Td>
-                  {request.status === "0" ? (
-                    <Select
-                      value={request.status}
-                      placeholder="选择操作"
-                      defaultValue="0"
-                      onChange={(e) =>
-                        updateLeaveRequestStatus(
-                          request.idString,
-                          e.target.value as "1" | "2"
-                        )
-                      }
+            {leaveRequests.length ? (
+              leaveRequests.map((request) => (
+                <Tr key={request.id}>
+                  <Td>{request.courseName}</Td>
+                  <Td>{request.studentName}</Td>
+                  <Td>{request.studentId}</Td>
+                  <Td>{request.day}</Td>
+                  <Td>{request.reason}</Td>
+                  <Td>
+                    <Box
+                      display={"flex"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
                     >
-                      <option value="1">批准</option>
-                      <option value="2">拒绝</option>
-                    </Select>
-                  ) : (
-                    <div>已处理，无需操作</div>
-                  )}
+                      <Box mr={4}>
+                        {leaveRequestStatus[Number(request.status)]}
+                      </Box>
+                      {request.status === "2" && (
+                        <Tooltip
+                          label={request.remark || "无"}
+                          fontSize="md"
+                          hasArrow
+                          placement="right"
+                        >
+                          <span>
+                            <Icon as={InfoOutlineIcon} w={6} h={6} />
+                          </span>
+                        </Tooltip>
+                      )}
+                    </Box>
+                  </Td>
+                  <Td>
+                    {request.status === "0" ? (
+                      <Select
+                        value={request.status}
+                        placeholder="选择操作"
+                        defaultValue="0"
+                        onChange={(e) =>
+                          updateLeaveRequestStatus(
+                            request.idString,
+                            e.target.value as "1" | "2"
+                          )
+                        }
+                      >
+                        <option value="1">批准</option>
+                        <option value="2">拒绝</option>
+                      </Select>
+                    ) : (
+                      <div>已处理，无需操作</div>
+                    )}
+                  </Td>
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={6} textAlign="center">
+                  <Spinner />
                 </Td>
               </Tr>
-            ))}
+            )}
           </Tbody>
         </Table>
       </Box>

@@ -18,6 +18,7 @@ import { useUser } from "../hook/useUser.ts";
 import { createCheck } from "../api/check.ts";
 import LocationComponent from "./LocationComponent.tsx";
 import { formatDate } from "../helper/format.ts";
+import SignInInfo from "./SignInInfo.tsx";
 
 // 签到任务的类型定义
 interface SignInTask {
@@ -45,11 +46,12 @@ const SignInCreation: React.FC = () => {
     courseId: "",
     studentIds: "",
   });
-  // const [showSignInfo, setShowSignInfo] = useState(false);
+  const [showSignInfo, setShowSignInfo] = useState(false);
   const [courses, setCourses] = useState<SelectionProps[]>([]);
   const [studentIdsString, setStudentIdsString] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(false);
+  const [newSignInId, setNewSignInId] = useState("");
   const toast = useToast();
 
   /**
@@ -91,7 +93,7 @@ const SignInCreation: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    createCheck({ ...signInTask, studentIds: studentIdsString }).then(() => {
+    createCheck({ ...signInTask, studentIds: studentIdsString }).then((e) => {
       toast({
         title: "签到任务已发布",
         description: "学生可以开始签到了！",
@@ -99,10 +101,11 @@ const SignInCreation: React.FC = () => {
         duration: 5000,
         isClosable: true,
       });
+      setNewSignInId(e.idString);
       setIsLoading(false);
       setDisableButton(true);
     });
-    // setShowSignInfo(true);
+    setShowSignInfo(true);
   };
 
   return (
@@ -187,7 +190,7 @@ const SignInCreation: React.FC = () => {
           {disableButton ? "已发布" : "发布签到"}
         </Button>
       </VStack>
-      {/* {showSignInfo && <SignInInfo />} */}
+      {showSignInfo && <SignInInfo checkId={newSignInId} />}
     </Box>
   );
 };

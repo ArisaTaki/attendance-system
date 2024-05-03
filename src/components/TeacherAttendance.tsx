@@ -12,6 +12,7 @@ import {
   Th,
   Td,
   TableContainer,
+  Spinner,
 } from "@chakra-ui/react";
 import StudentAbsences from "./StudentAbsences.tsx";
 import { getCourses } from "../api/course.ts";
@@ -100,18 +101,26 @@ const TeacherAttendance: React.FC = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {attendanceRecords.map((record, index) => (
-              <Tr key={index}>
-                <Td>{record.courseName}</Td>
-                <Td>{record.startTime}</Td>
-                <Td>{record.startTime}</Td>
-                <Td>{record.endTime}</Td>
-                <Td>{record.studentIds.split(",").length}</Td>
-                <Td>
-                  {record.studentIds.split(",").length - record.absentCount}
+            {attendanceRecords.length ? (
+              attendanceRecords.map((record, index) => (
+                <Tr key={index}>
+                  <Td>{record.courseName}</Td>
+                  <Td>{record.startTime}</Td>
+                  <Td>{record.startTime}</Td>
+                  <Td>{record.endTime}</Td>
+                  <Td>{record.studentIds.split(",").length}</Td>
+                  <Td>
+                    {record.studentIds.split(",").length - record.absentCount}
+                  </Td>
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={6} textAlign="center">
+                  <Spinner />
                 </Td>
               </Tr>
-            ))}
+            )}
           </Tbody>
         </Table>
       </TableContainer>

@@ -45,6 +45,16 @@ export interface CourseSignInRequest {
   studentIds: string;
 }
 
+export interface StudentCheckRecord {
+  number: string;
+  name: string;
+}
+
+export interface StudentCheckRecordRes {
+  presentStudentList: StudentCheckRecord[];
+  absentStudentList: StudentCheckRecord[];
+}
+
 // GetCheckRecordsProps 是获取签到记录的参数结构
 export interface GetCheckRecordsProps {
   studentId: string;
@@ -87,9 +97,16 @@ export const getCheckList = async (
 };
 
 // createCheck 是创建签到任务的 API 请求函数
-export const createCheck = async (check: CourseSignInRequest) => {
+export const createCheck = async (
+  check: CourseSignInRequest
+): Promise<CourseSign> => {
   try {
-    await axiosInstance.post("/check/save", check);
+    // TODO 等待修改之后的结构体
+    const res: AxiosResponse<CourseSign> = await axiosInstance.post(
+      "/check/save",
+      check
+    );
+    return res.data;
   } catch (error: any) {
     throw new Error(error.message || "创建签到任务失败");
   }
@@ -120,5 +137,16 @@ export const checkSign = async (obj: CheckSignProps) => {
     );
   } catch (error: any) {
     throw new Error(error.message || "签到失败");
+  }
+};
+
+export const checkGetStudentCheckRecord = async (checkId: string) => {
+  try {
+    const res: AxiosResponse<StudentCheckRecordRes> = await axiosInstance.get(
+      `/check/getStudentCheckRecord?checkId=${checkId}`
+    );
+    return res.data;
+  } catch (error: any) {
+    throw new Error(error.message || "获取签到记录失败");
   }
 };
