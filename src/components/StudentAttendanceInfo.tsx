@@ -40,7 +40,7 @@ const StudentAttendanceInfo: React.FC = () => {
    * 处理搜索操作
    */
   const handleSearch = () => {
-    checkMsgInfoList(Number(searchParams)).then((data) => {
+    checkMsgInfoList(searchParams).then((data) => {
       setDetails(data);
     });
   };
