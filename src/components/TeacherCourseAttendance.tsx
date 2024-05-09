@@ -126,7 +126,7 @@ const TeacherCourseAttendance: React.FC = () => {
           <Tbody>
             {details.map((detail, index) => (
               <Tr
-                key={detail.teacherId}
+                key={index}
                 backgroundColor={index % 2 === 1 ? "#f0f0f0" : "white"}
               >
                 <Td>{detail.teacherId}</Td>
